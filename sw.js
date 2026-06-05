@@ -1,6 +1,6 @@
-// 경제캘린더 PWA 서비스 워커 v2.1.0 — 발표값(Results) row stub
+// 경제캘린더 PWA 서비스 워커 v2.2.0 — 2026 H1 과거 결과 박힘 (31건)
 // 전략: Network First → 캐시 폴백 (오프라인 동작 유지 + 업데이트 즉시 전파)
-const CACHE = 'econ-cal-v2.1.0';
+const CACHE = 'econ-cal-v2.2.0';
 const PRECACHE = ['./', './index.html', './manifest.json',
                   './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 

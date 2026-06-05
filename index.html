@@ -658,11 +658,11 @@
     <h3>데이터</h3>
     <div class="s-group">
       <div class="s-row"><div><div class="lbl">버전</div></div>
-        <div class="sub" id="ver">v2.1.0 — 발표값 row stub</div></div>
+        <div class="sub" id="ver">v2.2.0 — 과거 6개월 결과 박힘</div></div>
       <div class="s-row"><div><div class="lbl">등록된 이벤트</div></div>
         <div class="sub" id="ev-count">— 개</div></div>
       <div class="s-row"><div><div class="lbl">데이터 기간</div></div>
-        <div class="sub">2026년 6~12월</div></div>
+        <div class="sub">2026년 1~12월 · 과거 발표값 포함</div></div>
     </div>
 
     <h3>정보</h3>
@@ -781,6 +781,40 @@ const TPL = {
 };
 
 const EVENTS = [
+  // ───────── 2026 H1 (과거 — 결과 포함) ─────────
+  ['2026-01-01',null,'S','KR_TRADE','🇰🇷 한국 12월 수출입'],
+  ['2026-01-09',null,'S','NFP','🇺🇸 미국 NFP (12월 고용)'],
+  ['2026-01-14',null,'S','CPI','🇺🇸 미국 CPI (12월)'],
+  ['2026-01-15',null,'S','KR_BOK','🇰🇷 한국 금통위'],
+  ['2026-01-27','2026-01-28','S','FOMC','🇺🇸 FOMC 금리결정'],
+  ['2026-01-30',null,'A','PCE','🇺🇸 미국 PCE (12월)'],
+  ['2026-02-02',null,'S','KR_TRADE','🇰🇷 한국 1월 수출입'],
+  ['2026-02-06',null,'S','NFP','🇺🇸 미국 NFP (1월 고용)'],
+  ['2026-02-11',null,'S','CPI','🇺🇸 미국 CPI (1월)'],
+  ['2026-02-25',null,'S','KR_BOK','🇰🇷 한국 금통위'],
+  ['2026-02-27',null,'A','PCE','🇺🇸 미국 PCE (1월)'],
+  ['2026-03-02',null,'S','KR_TRADE','🇰🇷 한국 2월 수출입'],
+  ['2026-03-06',null,'S','NFP','🇺🇸 미국 NFP (2월 고용)'],
+  ['2026-03-11',null,'S','CPI','🇺🇸 미국 CPI (2월)'],
+  ['2026-03-12',null,'S','WITCH','🇰🇷 네마녀의날 (1분기 마감)'],
+  ['2026-03-17','2026-03-18','S','FOMC','🇺🇸 FOMC 금리결정 (점도표)'],
+  ['2026-03-20',null,'B','US_OPT','🇺🇸 미국 옵션만기 (SPX 분기)'],
+  ['2026-03-27',null,'A','PCE','🇺🇸 미국 PCE (2월)'],
+  ['2026-04-01',null,'S','KR_TRADE','🇰🇷 한국 3월 수출입'],
+  ['2026-04-03',null,'S','NFP','🇺🇸 미국 NFP (3월 고용)'],
+  ['2026-04-09',null,'C','KR_OPT','🇰🇷 한국 옵션만기'],
+  ['2026-04-14',null,'S','CPI','🇺🇸 미국 CPI (3월)'],
+  ['2026-04-16',null,'S','KR_BOK','🇰🇷 한국 금통위'],
+  ['2026-04-30',null,'A','PCE','🇺🇸 미국 PCE (3월)'],
+  ['2026-05-04',null,'S','KR_TRADE','🇰🇷 한국 4월 수출입'],
+  ['2026-05-05','2026-05-06','S','FOMC','🇺🇸 FOMC 금리결정'],
+  ['2026-05-08',null,'S','NFP','🇺🇸 미국 NFP (4월 고용)'],
+  ['2026-05-13',null,'S','CPI','🇺🇸 미국 CPI (4월)'],
+  ['2026-05-14',null,'C','KR_OPT','🇰🇷 한국 옵션만기'],
+  ['2026-05-28',null,'S','KR_BOK','🇰🇷 한국 금통위'],
+  ['2026-05-29',null,'A','PCE','🇺🇸 미국 PCE (4월)'],
+
+  // ───────── 2026 H2 (현재 + 미래) ─────────
   ['2026-06-01',null,'S','KR_TRADE','🇰🇷 한국 5월 수출입'],
   ['2026-06-05',null,'S','NFP','🇺🇸 미국 NFP (5월 고용)'],
   ['2026-06-10',null,'S','CPI','🇺🇸 미국 CPI (5월)'],
@@ -868,15 +902,88 @@ const ORD = {S:0, A:1, B:2, C:3};
 // tone = 'bull'(주가 우호) / 'bear'(악재) / 'neutral'
 // ====================================================================
 const RESULTS_SAMPLE = {
-  // 과거 발표값 (시범 — 실제값과 다를 수 있음, UI 확인용)
-  '2026-06-01/KR_TRADE': {
-    actual:'+8.4%', forecast:'+3.2%', previous:'+1.5%',
-    detail:'반도체 수출 +32% · 자동차 +12%',
-    source:'관세청 · 6/1 06:00', tone:'bull' },
-  '2026-06-05/NFP': {
-    actual:'175K', forecast:'180K', previous:'200K',
-    detail:'실업률 4.1% (예상 4.0%)',
-    source:'BLS via FRED · 6/5 21:30', tone:'bull' },
+  // ───────── 2026 H1 과거 발표값 (UI 데모용 일관 내러티브) ─────────
+  // Fed: 1월 동결 → 3월 깜짝 인하 → 5월 동결
+  // KR: 수출 Q1 회복 → 반도체 강세 지속
+  // 인플레: 끈적 (CPI 3.2~3.4 박스권)
+
+  // 1월
+  '2026-01-01/KR_TRADE': { actual:'+5.1%', forecast:'+2.8%', previous:'+1.2%',
+    detail:'반도체 +28% · 12월 무역흑자 4.2B$', source:'관세청 · 1/1 06:00', tone:'bull' },
+  '2026-01-09/NFP':      { actual:'216K', forecast:'175K', previous:'199K',
+    detail:'실업률 3.9% · 임금 +0.4%', source:'BLS · 1/9 21:30', tone:'bear' },
+  '2026-01-14/CPI':      { actual:'3.4%', forecast:'3.2%', previous:'3.1%',
+    detail:'Core 3.9% (예상 3.8%) — 끈적', source:'BLS · 1/14 21:30', tone:'bear' },
+  '2026-01-15/KR_BOK':   { actual:'3.25% 동결', forecast:'3.25% 동결', previous:'3.25%',
+    detail:'만장일치 · 환율·물가 관망', source:'한은 · 1/15 10:00', tone:'neutral' },
+  '2026-01-27/FOMC':     { actual:'5.25% 동결', forecast:'5.25% 동결', previous:'5.25%',
+    detail:'성명서 "더 많은 확신 필요" · 매파 톤', source:'Fed · 1/28 04:00', tone:'bear' },
+  '2026-01-30/PCE':      { actual:'2.9%', forecast:'2.8%', previous:'2.7%',
+    detail:'Core PCE 3.1% (예상 3.0%)', source:'BEA · 1/30 22:30', tone:'bear' },
+
+  // 2월
+  '2026-02-02/KR_TRADE': { actual:'+11.8%', forecast:'+7.5%', previous:'+5.1%',
+    detail:'반도체 +44% · 자동차 +8%', source:'관세청 · 2/2 06:00', tone:'bull' },
+  '2026-02-06/NFP':      { actual:'143K', forecast:'185K', previous:'216K',
+    detail:'실업률 4.0% · 임금 +0.2%', source:'BLS · 2/6 22:30', tone:'bull' },
+  '2026-02-11/CPI':      { actual:'3.1%', forecast:'3.2%', previous:'3.4%',
+    detail:'Core 3.7% · 인플레 둔화 신호', source:'BLS · 2/11 22:30', tone:'bull' },
+  '2026-02-25/KR_BOK':   { actual:'3.25% 동결', forecast:'3.25% 동결', previous:'3.25%',
+    detail:'GDP 전망 +1.9% 유지', source:'한은 · 2/25 10:00', tone:'neutral' },
+  '2026-02-27/PCE':      { actual:'2.7%', forecast:'2.8%', previous:'2.9%',
+    detail:'Core PCE 2.9% (예상 3.0%) ↓', source:'BEA · 2/27 22:30', tone:'bull' },
+
+  // 3월
+  '2026-03-02/KR_TRADE': { actual:'+18.2%', forecast:'+12%', previous:'+11.8%',
+    detail:'반도체 +52% · 사상 최고 월간 흑자', source:'관세청 · 3/2 06:00', tone:'bull' },
+  '2026-03-06/NFP':      { actual:'198K', forecast:'190K', previous:'143K',
+    detail:'실업률 3.9% (예상 4.0%) ↓', source:'BLS · 3/6 22:30', tone:'neutral' },
+  '2026-03-11/CPI':      { actual:'3.2%', forecast:'3.1%', previous:'3.1%',
+    detail:'Core 3.6% · 박스권 지속', source:'BLS · 3/11 21:30', tone:'neutral' },
+  '2026-03-12/WITCH':    { actual:'KOSPI -1.8%', forecast:'—', previous:'—',
+    detail:'외인 -1.2조 · 동시만기 청산', source:'KRX · 3/12 15:30', tone:'bear' },
+  '2026-03-17/FOMC':     { actual:'5.00% 인하 (-25bp)', forecast:'5.25% 동결', previous:'5.25%',
+    detail:'⚡ 깜짝 인하 · 점도표 연내 2회 더 인하 시사', source:'Fed · 3/18 03:00', tone:'bull' },
+  '2026-03-20/US_OPT':   { actual:'SPX 콜 청산 우세', forecast:'—', previous:'—',
+    detail:'FOMC 인하 직후 만기 · 변동성 제한', source:'CBOE · 3/20', tone:'bull' },
+  '2026-03-27/PCE':      { actual:'2.6%', forecast:'2.7%', previous:'2.7%',
+    detail:'Core PCE 2.8% · Fed 인하 정당화', source:'BEA · 3/27 21:30', tone:'bull' },
+
+  // 4월
+  '2026-04-01/KR_TRADE': { actual:'+14.5%', forecast:'+16%', previous:'+18.2%',
+    detail:'반도체 +38% · 1분기 누적 +13%', source:'관세청 · 4/1 06:00', tone:'neutral' },
+  '2026-04-03/NFP':      { actual:'265K', forecast:'200K', previous:'198K',
+    detail:'실업률 3.8% · 임금 +0.4% — 깜짝 강세', source:'BLS · 4/3 21:30', tone:'bear' },
+  '2026-04-09/KR_OPT':   { actual:'정상 흐름', forecast:'—', previous:'—',
+    detail:'옵션만기 영향 제한적', source:'KRX · 4/9', tone:'neutral' },
+  '2026-04-14/CPI':      { actual:'3.5%', forecast:'3.2%', previous:'3.2%',
+    detail:'⚠️ Core 3.8% · 인플레 재점화 우려', source:'BLS · 4/14 21:30', tone:'bear' },
+  '2026-04-16/KR_BOK':   { actual:'3.00% 인하 (-25bp)', forecast:'3.25% 동결', previous:'3.25%',
+    detail:'⚡ Fed 따라 인하 · 환율 우려 불구', source:'한은 · 4/16 10:00', tone:'bull' },
+  '2026-04-30/PCE':      { actual:'2.9%', forecast:'2.7%', previous:'2.6%',
+    detail:'Core PCE 3.0% (예상 2.8%) ↑', source:'BEA · 4/30 21:30', tone:'bear' },
+
+  // 5월
+  '2026-05-04/KR_TRADE': { actual:'+6.2%', forecast:'+8%', previous:'+14.5%',
+    detail:'반도체 +18% · 둔화 신호', source:'관세청 · 5/4 06:00', tone:'bear' },
+  '2026-05-05/FOMC':     { actual:'5.00% 동결', forecast:'4.75% 인하', previous:'5.00%',
+    detail:'⚠️ 인플레 재점화 → 인하 보류 · 매파', source:'Fed · 5/6 03:00', tone:'bear' },
+  '2026-05-08/NFP':      { actual:'195K', forecast:'205K', previous:'265K',
+    detail:'실업률 4.0% (예상 3.9%) ↑', source:'BLS · 5/8 21:30', tone:'bull' },
+  '2026-05-13/CPI':      { actual:'3.6%', forecast:'3.4%', previous:'3.5%',
+    detail:'⚠️ Core 3.9% · 3개월 연속 상회', source:'BLS · 5/13 21:30', tone:'bear' },
+  '2026-05-14/KR_OPT':   { actual:'외인 풋 청산', forecast:'—', previous:'—',
+    detail:'KOSPI -0.8% · 매도 우위', source:'KRX · 5/14', tone:'bear' },
+  '2026-05-28/KR_BOK':   { actual:'3.00% 동결', forecast:'2.75% 인하', previous:'3.00%',
+    detail:'환율 1530 돌파 → 인하 보류', source:'한은 · 5/28 10:00', tone:'bear' },
+  '2026-05-29/PCE':      { actual:'3.1%', forecast:'2.9%', previous:'2.9%',
+    detail:'⚠️ Core PCE 3.2% · 끈적 확인', source:'BEA · 5/29 21:30', tone:'bear' },
+
+  // 6월 (현재)
+  '2026-06-01/KR_TRADE': { actual:'+8.4%', forecast:'+3.2%', previous:'+6.2%',
+    detail:'반도체 +32% · 자동차 +12%', source:'관세청 · 6/1 06:00', tone:'bull' },
+  '2026-06-05/NFP':      { actual:'175K', forecast:'180K', previous:'195K',
+    detail:'실업률 4.1% (예상 4.0%) ↑', source:'BLS · 6/5 21:30', tone:'bull' },
 };
 let RESULTS = { ...RESULTS_SAMPLE };
 
