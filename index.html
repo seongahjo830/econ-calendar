@@ -35,6 +35,10 @@
     --bear: #DC2626; --bear-bg: #FEF2F2;
     --tip:  #2347D9; --tip-bg:  #EEF1FF;
 
+    --sig-g: #16A34A; --sig-g-bg: #F0FDF4;
+    --sig-y: #CA8A04; --sig-y-bg: #FEFCE8;
+    --sig-r: #DC2626; --sig-r-bg: #FEF2F2;
+
     --r-sm: 10px;
     --r-md: 14px;
     --r-lg: 20px;
@@ -274,12 +278,256 @@
   .install-banner button { background:white; color:var(--ink); border:0;
     padding:8px 12px; border-radius:10px; font-weight:700; font-size:12.5px;
     flex-shrink:0; }
+
+  /* ============================================================
+     v2.0.0 — L0~L7 정보 레이어 (홈 화면 · 트리거 모달)
+     ============================================================ */
+  /* 샘플 데이터 디스클로저 칩 */
+  .sample-chip { display:inline-flex; align-items:center; gap:6px;
+    background:var(--bg-soft); color:var(--ink-3); font-size:11px; font-weight:600;
+    padding:5px 10px; border-radius:999px; margin:0 20px 12px; letter-spacing:0.01em; }
+  .sample-chip .dot { width:6px; height:6px; border-radius:50%; background:var(--ink-3); }
+
+  /* 홈 hero — L1 핵심 5숫자 */
+  .home-hero { padding:6px 20px 4px; }
+  .home-hero .date-line { font-size:12px; color:var(--ink-3); font-weight:600;
+    letter-spacing:0.01em; margin-bottom:14px; }
+  .quote-card { background:var(--bg-card); border:1px solid var(--line);
+    border-radius:var(--r-lg); padding:18px 20px; margin-bottom:14px;
+    box-shadow:var(--shadow-sm); }
+  .quote-card .row { display:flex; justify-content:space-between; align-items:baseline;
+    padding:10px 0; border-top:1px solid var(--line-soft); }
+  .quote-card .row:first-child { border-top:0; padding-top:0; }
+  .quote-card .row:last-child { padding-bottom:0; }
+  .quote-card .lbl { font-size:13px; color:var(--ink-3); font-weight:600; }
+  .quote-card .val { font-size:22px; font-weight:800; letter-spacing:-0.02em;
+    color:var(--ink); font-variant-numeric:tabular-nums; }
+  .quote-card .chg { font-size:12.5px; font-weight:700; margin-left:8px;
+    font-variant-numeric:tabular-nums; }
+  .quote-card .chg.up { color:var(--bear); }
+  .quote-card .chg.dn { color:var(--accent); }
+  .quote-card .flow { font-size:11.5px; color:var(--ink-3); font-weight:500;
+    margin-top:6px; font-variant-numeric:tabular-nums; letter-spacing:0.01em; }
+  .quote-card .flow .neg { color:var(--accent); font-weight:700; }
+  .quote-card .flow .pos { color:var(--bear); font-weight:700; }
+
+  /* 트리거 신호등 카드 */
+  .trigger-card { display:block; width:calc(100% - 40px); margin:0 20px 14px;
+    background:var(--sig-r-bg); border:1px solid var(--sig-r);
+    border-radius:var(--r-lg); padding:16px 18px; text-align:left;
+    box-shadow:var(--shadow-sm); transition:transform .15s; }
+  .trigger-card:active { transform:scale(0.985); }
+  .trigger-card.y { background:var(--sig-y-bg); border-color:var(--sig-y); }
+  .trigger-card.g { background:var(--sig-g-bg); border-color:var(--sig-g); }
+  .trigger-card .head { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  .trigger-card .sig-dot { width:14px; height:14px; border-radius:50%;
+    background:var(--sig-r); box-shadow:0 0 0 4px rgba(220,38,38,0.15); }
+  .trigger-card.y .sig-dot { background:var(--sig-y); box-shadow:0 0 0 4px rgba(202,138,4,0.15); }
+  .trigger-card.g .sig-dot { background:var(--sig-g); box-shadow:0 0 0 4px rgba(22,163,74,0.15); }
+  .trigger-card .head .title { font-size:14px; font-weight:800; color:var(--ink);
+    letter-spacing:-0.01em; }
+  .trigger-card .stage { font-size:13px; font-weight:700; margin-left:auto;
+    color:var(--sig-r); }
+  .trigger-card.y .stage { color:var(--sig-y); }
+  .trigger-card.g .stage { color:var(--sig-g); }
+  .trigger-card .desc { font-size:13px; color:var(--ink-2); line-height:1.5;
+    margin-top:6px; }
+  .trigger-card .more { font-size:11.5px; color:var(--ink-3); font-weight:600;
+    margin-top:10px; letter-spacing:0.01em; }
+
+  /* 한 줄 코멘트 */
+  .comment-card { margin:0 20px 14px; padding:16px 18px;
+    background:var(--bg-card); border:1px solid var(--line);
+    border-radius:var(--r-lg); box-shadow:var(--shadow-sm); }
+  .comment-card .lbl { font-size:11px; color:var(--accent); font-weight:700;
+    letter-spacing:0.06em; text-transform:uppercase; margin-bottom:6px; }
+  .comment-card .body { font-size:14px; color:var(--ink); line-height:1.55;
+    font-weight:500; letter-spacing:-0.005em; }
+
+  /* 카운트다운 */
+  .countdown { margin:0 20px 14px; padding:14px 18px;
+    background:var(--accent-soft); border:1px solid #DCE2FA;
+    border-radius:var(--r-lg); display:flex; align-items:center; gap:12px; }
+  .countdown .ic { font-size:20px; }
+  .countdown .col { flex:1; }
+  .countdown .top { font-size:11px; color:var(--accent); font-weight:700;
+    letter-spacing:0.04em; text-transform:uppercase; }
+  .countdown .num { font-size:18px; font-weight:800; color:var(--ink);
+    letter-spacing:-0.015em; font-variant-numeric:tabular-nums; }
+  .countdown .bot { font-size:12px; color:var(--ink-3); font-weight:500;
+    margin-top:2px; }
+
+  /* 이번주 S급 미니 리스트 */
+  .home-list { margin:6px 20px 24px; }
+  .home-list .h { font-size:11px; color:var(--ink-3); font-weight:700;
+    letter-spacing:0.06em; text-transform:uppercase; margin-bottom:10px;
+    padding:0 2px; }
+  .home-list .item { display:flex; align-items:center; gap:10px; padding:11px 4px;
+    border-top:1px solid var(--line-soft); cursor:pointer; }
+  .home-list .item:first-child { border-top:0; }
+  .home-list .item .dt { font-size:13px; color:var(--ink-3); font-weight:700;
+    flex:0 0 52px; font-variant-numeric:tabular-nums; }
+  .home-list .item .ti { font-size:14px; color:var(--ink); font-weight:600;
+    flex:1; letter-spacing:-0.005em; }
+  .home-list .item .gd { font-size:10px; font-weight:800; padding:3px 7px;
+    border-radius:5px; }
+  .home-list .item .gd.S { background:var(--s-bg); color:var(--s); }
+  .home-list .item .gd.A { background:var(--a-bg); color:var(--a); }
+  .home-list .item .gd.B { background:var(--b-bg); color:var(--b); }
+  .home-list .item .gd.C { background:var(--c-bg); color:var(--c); }
+  .home-list .empty { font-size:13px; color:var(--ink-3); padding:24px 0;
+    text-align:center; }
+
+  /* ── 트리거 7단계 bottom-sheet 모달 ── */
+  .modal-mask { position:fixed; inset:0; background:rgba(10,10,10,0.45);
+    z-index:99; opacity:0; pointer-events:none; transition:opacity .2s; }
+  .modal-mask.show { opacity:1; pointer-events:auto; }
+  .modal-sheet { position:fixed; left:0; right:0; bottom:0; z-index:100;
+    background:var(--bg-card); border-radius:24px 24px 0 0;
+    max-height:88vh; overflow-y:auto;
+    transform:translateY(100%); transition:transform .25s cubic-bezier(.25,.8,.3,1);
+    box-shadow:0 -8px 32px -8px rgba(10,10,10,0.18);
+    padding-bottom:calc(env(safe-area-inset-bottom) + 24px); }
+  .modal-sheet.show { transform:translateY(0); }
+  .modal-grip { width:36px; height:4px; background:var(--ink-4); border-radius:2px;
+    margin:10px auto 0; opacity:0.6; }
+  .modal-head { padding:14px 20px 6px; display:flex; align-items:center; gap:10px;
+    justify-content:space-between; }
+  .modal-head .ttl { font-size:17px; font-weight:800; letter-spacing:-0.02em; }
+  .modal-head .close { background:var(--bg-soft); border:0; width:28px; height:28px;
+    border-radius:50%; color:var(--ink-2); font-size:16px; font-weight:700; }
+  .modal-body { padding:8px 20px 0; }
+  .modal-intro { font-size:13px; color:var(--ink-2); line-height:1.55;
+    margin-bottom:14px; padding:12px 14px; background:var(--bg-soft);
+    border-radius:var(--r-md); }
+  .step { display:flex; gap:12px; padding:14px 0; border-top:1px solid var(--line-soft); }
+  .step:first-child { border-top:0; }
+  .step .n { flex:0 0 28px; width:28px; height:28px; border-radius:50%;
+    background:var(--bg-soft); color:var(--ink-3); font-size:12px; font-weight:800;
+    display:flex; align-items:center; justify-content:center; }
+  .step.on .n { background:var(--sig-r); color:white; }
+  .step.warn .n { background:var(--sig-y); color:white; }
+  .step.ok .n { background:var(--sig-g); color:white; }
+  .step .body { flex:1; }
+  .step .title { font-size:14px; font-weight:700; color:var(--ink);
+    letter-spacing:-0.005em; }
+  .step .thr { font-size:12px; color:var(--ink-3); margin-top:3px; font-weight:500; }
+  .step .cur { font-size:12px; margin-top:5px; font-weight:700;
+    font-variant-numeric:tabular-nums; }
+  .step.on .cur { color:var(--sig-r); }
+  .step.warn .cur { color:var(--sig-y); }
+  .step.ok .cur { color:var(--sig-g); }
+  .step .status { font-size:10px; font-weight:800; padding:3px 7px; border-radius:5px;
+    align-self:flex-start; }
+  .step.on .status { background:var(--sig-r-bg); color:var(--sig-r); }
+  .step.warn .status { background:var(--sig-y-bg); color:var(--sig-y); }
+  .step.ok .status { background:var(--sig-g-bg); color:var(--sig-g); }
+  .step.idle .status { background:var(--bg-soft); color:var(--ink-3); }
+
+  /* Pro 안내 카드 */
+  .pro-card { margin:14px 20px 24px; padding:18px 20px;
+    background:linear-gradient(135deg, #0A0A0A 0%, #2347D9 100%);
+    color:white; border-radius:var(--r-lg); box-shadow:var(--shadow-md); }
+  .pro-card .badge { display:inline-block; background:rgba(255,255,255,0.15);
+    color:white; font-size:10px; font-weight:800; padding:4px 9px; border-radius:5px;
+    letter-spacing:0.08em; margin-bottom:8px; }
+  .pro-card .ttl { font-size:16px; font-weight:800; letter-spacing:-0.02em;
+    margin-bottom:6px; }
+  .pro-card .desc { font-size:12.5px; opacity:0.85; line-height:1.5;
+    margin-bottom:12px; }
+  .pro-card .price { font-size:14px; font-weight:700; }
+  .pro-card .price .strike { opacity:0.6; text-decoration:line-through;
+    font-weight:500; margin-right:6px; }
+  .pro-card .price .soon { background:rgba(255,255,255,0.15); padding:3px 7px;
+    border-radius:5px; font-size:10px; font-weight:800; letter-spacing:0.05em;
+    margin-left:8px; }
 </style>
 </head>
 <body>
 
+<!-- ============ 홈 화면 (L1 — default, v2.0.0) ============ -->
+<section class="screen active" id="screen-home">
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark">$</div>
+      <div class="name">경제캘린더<span class="sub"> · 홈</span></div>
+    </div>
+    <button class="today-btn" onclick="switchTab('cal')">캘린더</button>
+  </div>
+
+  <div class="home-hero">
+    <div class="date-line" id="home-date">— · —요일</div>
+  </div>
+
+  <div class="sample-chip" id="sample-chip">
+    <span class="dot"></span>샘플 데이터 · 실시간 연동은 Phase 3.1
+  </div>
+
+  <!-- 핵심 5숫자 카드 -->
+  <div class="quote-card" style="margin:0 20px 14px;">
+    <div class="row">
+      <div>
+        <div class="lbl">💱 USD/KRW</div>
+        <div style="margin-top:4px;">
+          <span class="val" id="q-fx">1,543</span>
+          <span class="chg up" id="q-fx-chg">▲11 (+0.72%)</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div style="width:100%;">
+        <div class="lbl">📉 코스피</div>
+        <div style="margin-top:4px;">
+          <span class="val" id="q-kospi">8,056</span>
+          <span class="chg dn" id="q-kospi-chg">▼583 (-6.75%)</span>
+        </div>
+        <div class="flow" id="q-flow">
+          외인 <span class="neg">-2,055M</span> · 기관 <span class="neg">-665M</span> · 개인 <span class="pos">+2,594M</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 트리거 신호등 카드 -->
+  <button class="trigger-card" id="trigger-card" onclick="openTriggerModal()">
+    <div class="head">
+      <span class="sig-dot"></span>
+      <span class="title">트리거 체인</span>
+      <span class="stage" id="trig-stage">🔴 4/7</span>
+    </div>
+    <div class="desc" id="trig-desc">
+      환율↑ → 외인매도 → 선물청산 → 비차익매도 진행 중
+    </div>
+    <div class="more">탭하면 7단계 자세히 보기 →</div>
+  </button>
+
+  <!-- 한 줄 코멘트 -->
+  <div class="comment-card">
+    <div class="lbl">💬 오늘 한 줄</div>
+    <div class="body" id="comment-body">
+      환율 1540 돌파로 외인 헤지매도 가속. 6/11 ECB · 6/12 네마녀까지 변동성 고점. <b>S급 위주 보수적 대응.</b>
+    </div>
+  </div>
+
+  <!-- 다음 S급 카운트다운 -->
+  <div class="countdown" id="countdown" onclick="goNextS()">
+    <div class="ic">⏰</div>
+    <div class="col">
+      <div class="top">다음 S급까지</div>
+      <div class="num" id="cd-num">— —시간</div>
+      <div class="bot" id="cd-bot">—</div>
+    </div>
+  </div>
+
+  <!-- 이번 주 S급 리스트 -->
+  <div class="home-list">
+    <div class="h">이번 주 S급 일정</div>
+    <div id="home-list-body"></div>
+  </div>
+</section>
+
 <!-- ============ 캘린더 화면 ============ -->
-<section class="screen active" id="screen-cal">
+<section class="screen" id="screen-cal">
   <div class="topbar">
     <div class="brand">
       <div class="mark">$</div>
@@ -379,7 +627,7 @@
     <h3>데이터</h3>
     <div class="s-group">
       <div class="s-row"><div><div class="lbl">버전</div></div>
-        <div class="sub" id="ver">v1.1.0</div></div>
+        <div class="sub" id="ver">v2.0.0 — L0~L7 통합</div></div>
       <div class="s-row"><div><div class="lbl">등록된 이벤트</div></div>
         <div class="sub" id="ev-count">— 개</div></div>
       <div class="s-row"><div><div class="lbl">데이터 기간</div></div>
@@ -396,6 +644,20 @@
         <div class="sub">Fed · BOK · BOJ · ECB · 기재부</div></div></div>
     </div>
 
+    <div class="pro-card">
+      <div class="badge">COMING SOON</div>
+      <div class="ttl">⭐ Plus / Pro 준비 중</div>
+      <div class="desc">
+        과거 발표 표 · 트리거 단계별 raw · AI 한 줄 코멘트 개인화 — Phase 3.3에 출시.
+        얼리어답터 100명 한정 Lifetime 할인 예정.
+      </div>
+      <div class="price">
+        Plus <span class="strike">월 ₩3,900</span>
+        Pro <span class="strike">월 ₩9,900</span>
+        <span class="soon">소식 알림</span>
+      </div>
+    </div>
+
     <h3 style="text-align:center; color:var(--ink-4); margin-top:32px;
       letter-spacing:0.02em; text-transform:none; font-size:11px; font-weight:500;">
       투자 판단은 사용자 본인의 책임입니다
@@ -404,14 +666,37 @@
   </div>
 </section>
 
-<!-- ============ 하단 탭 ============ -->
+<!-- ============ 트리거 7단계 모달 (L5 — v2.0.0) ============ -->
+<div class="modal-mask" id="trig-mask" onclick="closeTriggerModal()"></div>
+<div class="modal-sheet" id="trig-sheet" role="dialog" aria-modal="true">
+  <div class="modal-grip"></div>
+  <div class="modal-head">
+    <div class="ttl">🚦 트리거 체인 7단계</div>
+    <button class="close" onclick="closeTriggerModal()" aria-label="닫기">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-intro">
+      환율 상승부터 개인 패닉 매도까지 — <b>한국 시장 하락 연쇄 7단계</b>.
+      어디까지 진행됐는지 신호등으로 확인. (수치는 샘플 · Phase 3.1에 실시간 연동)
+    </div>
+    <div id="steps-body"></div>
+    <div style="font-size:11px; color:var(--ink-3); padding:14px 0 6px;
+                line-height:1.5; letter-spacing:0.005em;">
+      ※ 임계값은 코스피 2020~2025 백테스트 v0.1 초안. v1.0은 Phase 3.2에 튜닝.
+    </div>
+  </div>
+</div>
+
+<!-- ============ 하단 탭 (v2.0.0 — 4개) ============ -->
 <nav class="tabs">
-  <button class="tab active" data-screen="cal" onclick="switchTab('cal')">
+  <button class="tab active" data-screen="home" onclick="switchTab('home')">
+    <span class="ic">💡</span>홈</button>
+  <button class="tab" data-screen="cal" onclick="switchTab('cal')">
     <span class="ic">📅</span>캘린더</button>
   <button class="tab" data-screen="today" onclick="switchTab('today')">
     <span class="ic">⚡</span>오늘</button>
   <button class="tab" data-screen="settings" onclick="switchTab('settings')">
-    <span class="ic">⚙</span>설정</button>
+    <span class="ic">⚙</span>더보기</button>
 </nav>
 
 <script>
@@ -730,12 +1015,169 @@ function renderTodayScreen() {
 }
 
 // ====================================================================
+// 홈 (L1) — v2.0.0
+// ====================================================================
+// 샘플 시세 (Phase 3.1에 실시간 연동)
+const DEMO_MARKET = {
+  fx:    { val:'1,543',  chg:'▲11 (+0.72%)',   dir:'up' },
+  kospi: { val:'8,056',  chg:'▼583 (-6.75%)',  dir:'dn' },
+  flow:  { foreign:-2055, inst:-665, retail:+2594 },  // 백만원 단위
+};
+
+// 트리거 7단계 — Phase 3.2에 백테스트로 임계값 튜닝
+const TRIGGER_STEPS = [
+  { n:1, on:'on',   title:'환율 USD/KRW',
+    thr:'🟡 > 1,500 · 🔴 > 1,540',  cur:'현재 1,543' },
+  { n:2, on:'on',   title:'외인 5일 누적 순매도',
+    thr:'🟡 > 3조 · 🔴 > 5조',       cur:'현재 5.8조' },
+  { n:3, on:'on',   title:'코스피200 선물 베이시스',
+    thr:'🟡 < -0.5p · 🔴 < -1.0p',   cur:'현재 -1.2p' },
+  { n:4, on:'on',   title:'기관 비차익 순매도',
+    thr:'🔴 > 5천억/일',              cur:'현재 -6,650억' },
+  { n:5, on:'warn', title:'풋콜비율',
+    thr:'🟡 > 1.2 · 🔴 > 1.5',        cur:'현재 1.34' },
+  { n:6, on:'idle', title:'대차잔고 5일 증가율',
+    thr:'🔴 > 10%',                   cur:'현재 +6.2%' },
+  { n:7, on:'idle', title:'개인 신용잔고·반대매매',
+    thr:'🔴 신용↓ + 반대매매 발생',   cur:'현재 신용 +0.3%' },
+];
+
+function fmtFlow(n) {
+  const abs = Math.abs(n);
+  const sign = n < 0 ? '-' : '+';
+  const cls  = n < 0 ? 'neg' : 'pos';
+  return `<span class="${cls}">${sign}${abs.toLocaleString()}M</span>`;
+}
+
+function renderHome() {
+  // 날짜
+  const d = today;
+  document.getElementById('home-date').textContent =
+    `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} · ${WD[d.getDay()]}요일`;
+
+  // 시세 (샘플)
+  document.getElementById('q-fx').textContent     = DEMO_MARKET.fx.val;
+  document.getElementById('q-fx-chg').textContent = DEMO_MARKET.fx.chg;
+  document.getElementById('q-fx-chg').className   = 'chg ' + DEMO_MARKET.fx.dir;
+  document.getElementById('q-kospi').textContent     = DEMO_MARKET.kospi.val;
+  document.getElementById('q-kospi-chg').textContent = DEMO_MARKET.kospi.chg;
+  document.getElementById('q-kospi-chg').className   = 'chg ' + DEMO_MARKET.kospi.dir;
+  const f = DEMO_MARKET.flow;
+  document.getElementById('q-flow').innerHTML =
+    `외인 ${fmtFlow(f.foreign)} · 기관 ${fmtFlow(f.inst)} · 개인 ${fmtFlow(f.retail)}`;
+
+  // 트리거 신호등 — 켜진 단계 개수 기반
+  const onCount = TRIGGER_STEPS.filter(s => s.on === 'on').length;
+  const warnCount = TRIGGER_STEPS.filter(s => s.on === 'warn').length;
+  const total = TRIGGER_STEPS.length;
+  const card = document.getElementById('trigger-card');
+  card.classList.remove('y', 'g');
+  let sig = '🔴', color = '';
+  if (onCount >= 3) { sig = '🔴'; }
+  else if (onCount >= 1 || warnCount >= 2) { sig = '🟡'; card.classList.add('y'); }
+  else { sig = '🟢'; card.classList.add('g'); }
+  document.getElementById('trig-stage').textContent = `${sig} ${onCount}/${total}`;
+
+  // 다음 S급 카운트다운
+  const nextS = findNextS();
+  if (nextS) {
+    const ms = parseYmd(nextS.k).getTime() - today.getTime();
+    const days = Math.floor(ms / (1000*60*60*24));
+    const hours = Math.floor((ms % (1000*60*60*24)) / (1000*60*60));
+    document.getElementById('cd-num').textContent =
+      days > 0 ? `${days}일 ${hours}시간` : (hours > 0 ? `${hours}시간` : '오늘');
+    document.getElementById('cd-bot').textContent =
+      `${nextS.title} · ${nextS.k}`;
+  } else {
+    document.getElementById('cd-num').textContent = '—';
+    document.getElementById('cd-bot').textContent = '예정된 S급 없음';
+  }
+
+  // 이번주 S급 리스트
+  renderHomeList();
+}
+
+function findNextS() {
+  for (let off = 0; off < 60; off++) {
+    const d = new Date(today); d.setDate(today.getDate() + off);
+    const k = ymd(d);
+    const evs = (byDate[k] || []).filter(e => e.g === 'S');
+    if (evs.length) return { ...evs[0], k };
+  }
+  return null;
+}
+
+function renderHomeList() {
+  // 오늘 ~ +7일 S급
+  const out = [];
+  for (let off = 0; off < 8; off++) {
+    const d = new Date(today); d.setDate(today.getDate() + off);
+    const k = ymd(d);
+    (byDate[k] || []).filter(e => e.g === 'S').forEach(e => out.push({ ...e, k, off }));
+  }
+  const root = document.getElementById('home-list-body');
+  if (!out.length) {
+    root.innerHTML = `<div class="empty">이번주 S급 일정 없음</div>`;
+    return;
+  }
+  root.innerHTML = out.slice(0, 6).map(ev => {
+    const d = parseYmd(ev.k);
+    const dt = ev.off === 0 ? '오늘' : ev.off === 1 ? '내일' :
+               `${d.getMonth()+1}/${d.getDate()}`;
+    return `<div class="item" onclick="goEvent('${ev.k}')">
+      <div class="dt">${dt}</div>
+      <div class="ti">${ev.title}</div>
+      <div class="gd S">S</div>
+    </div>`;
+  }).join('');
+}
+
+function goEvent(k) {
+  selected = k;
+  const d = parseYmd(k);
+  viewY = d.getFullYear(); viewM = d.getMonth();
+  switchTab('cal');
+  renderMonth(); renderSheet();
+}
+function goNextS() {
+  const n = findNextS();
+  if (n) goEvent(n.k);
+}
+
+// ── 트리거 모달 ──
+function openTriggerModal() {
+  renderSteps();
+  document.getElementById('trig-mask').classList.add('show');
+  document.getElementById('trig-sheet').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeTriggerModal() {
+  document.getElementById('trig-mask').classList.remove('show');
+  document.getElementById('trig-sheet').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function renderSteps() {
+  const map = { on:'🔴 진행 중', warn:'🟡 경계', ok:'🟢 정상', idle:'⚪ 대기' };
+  document.getElementById('steps-body').innerHTML = TRIGGER_STEPS.map(s => `
+    <div class="step ${s.on}">
+      <div class="n">${s.n}</div>
+      <div class="body">
+        <div class="title">${s.title}</div>
+        <div class="thr">${s.thr}</div>
+        <div class="cur">${s.cur}</div>
+      </div>
+      <div class="status">${map[s.on]}</div>
+    </div>`).join('');
+}
+
+// ====================================================================
 // 탭 전환
 // ====================================================================
 function switchTab(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.screen===name));
+  if (name === 'home') renderHome();
   if (name === 'today') renderTodayScreen();
   if (name === 'cal') { renderMonth(); renderSheet(); }
   window.scrollTo({top:0, behavior:'smooth'});
@@ -762,8 +1204,14 @@ document.getElementById('install-btn').addEventListener('click', async () => {
 // 초기화
 // ====================================================================
 document.getElementById('ev-count').textContent = `${EVENTS.length}개`;
+renderHome();
 renderMonth();
 renderSheet();
+
+// ESC로 모달 닫기
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeTriggerModal();
+});
 
 // 서비스 워커 — 즉시 갱신
 if ('serviceWorker' in navigator) {
