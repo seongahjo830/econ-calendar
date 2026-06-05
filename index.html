@@ -424,6 +424,37 @@
   .step.ok .status { background:var(--sig-g-bg); color:var(--sig-g); }
   .step.idle .status { background:var(--bg-soft); color:var(--ink-3); }
 
+  /* 결과 row — L4 확장 (v2.1.0) */
+  .result-row { margin-top:8px; padding:11px 12px; border-radius:var(--r-md);
+    background:var(--bg-soft); border:1px solid var(--line); }
+  .result-row .head { display:flex; align-items:center; gap:8px;
+    margin-bottom:4px; }
+  .result-row .head .ic { font-size:13px; }
+  .result-row .head .lbl { font-size:11px; font-weight:800; color:var(--ink-2);
+    letter-spacing:0.05em; text-transform:uppercase; }
+  .result-row .head .ago { font-size:10.5px; color:var(--ink-3); font-weight:600;
+    margin-left:auto; letter-spacing:0.02em; }
+
+  .result-row.pending { background:var(--bg-card); border-style:dashed;
+    border-color:var(--ink-4); }
+  .result-row.pending .body { font-size:13px; color:var(--ink-3); font-weight:600; }
+
+  .result-row.done .actual { font-size:18px; font-weight:800;
+    letter-spacing:-0.02em; font-variant-numeric:tabular-nums; }
+  .result-row.done.bear .actual { color:var(--bear); }
+  .result-row.done.bull .actual { color:var(--bull); }
+  .result-row.done.neutral .actual { color:var(--ink); }
+  .result-row.done .compare { font-size:11.5px; color:var(--ink-3);
+    font-weight:600; margin-top:3px; font-variant-numeric:tabular-nums; }
+  .result-row.done .tone { display:inline-flex; align-items:center; gap:5px;
+    font-size:11px; font-weight:800; padding:3px 7px; border-radius:5px;
+    margin-top:6px; }
+  .result-row.done.bear .tone { background:var(--bear-bg); color:var(--bear); }
+  .result-row.done.bull .tone { background:var(--bull-bg); color:var(--bull); }
+  .result-row.done.neutral .tone { background:var(--bg-soft); color:var(--ink-3); }
+  .result-row .src { font-size:10px; color:var(--ink-4); font-weight:500;
+    margin-top:6px; letter-spacing:0.01em; }
+
   /* Pro 안내 카드 */
   .pro-card { margin:14px 20px 24px; padding:18px 20px;
     background:linear-gradient(135deg, #0A0A0A 0%, #2347D9 100%);
@@ -460,7 +491,7 @@
   </div>
 
   <div class="sample-chip" id="sample-chip">
-    <span class="dot"></span>샘플 데이터 · 실시간 연동은 Phase 3.1
+    <span class="dot"></span>시세·수급 샘플 데이터 · 발표값 자동수집은 Phase 3.1.1
   </div>
 
   <!-- 핵심 5숫자 카드 -->
@@ -627,7 +658,7 @@
     <h3>데이터</h3>
     <div class="s-group">
       <div class="s-row"><div><div class="lbl">버전</div></div>
-        <div class="sub" id="ver">v2.0.0 — L0~L7 통합</div></div>
+        <div class="sub" id="ver">v2.1.0 — 발표값 row stub</div></div>
       <div class="s-row"><div><div class="lbl">등록된 이벤트</div></div>
         <div class="sub" id="ev-count">— 개</div></div>
       <div class="s-row"><div><div class="lbl">데이터 기간</div></div>
@@ -830,6 +861,70 @@ EVENTS.forEach(ev => {
 });
 const ORD = {S:0, A:1, B:2, C:3};
 
+// ====================================================================
+// 발표값(Results) — v2.1.0 (Phase 3.1.0 UI stub)
+// Phase 3.1.1+에 GitHub Actions cron이 ./results.json을 자동 생성·갱신
+// 키 = "YYYY-MM-DD/TPLKEY" (이벤트 starts + tpl ID)
+// tone = 'bull'(주가 우호) / 'bear'(악재) / 'neutral'
+// ====================================================================
+const RESULTS_SAMPLE = {
+  // 과거 발표값 (시범 — 실제값과 다를 수 있음, UI 확인용)
+  '2026-06-01/KR_TRADE': {
+    actual:'+8.4%', forecast:'+3.2%', previous:'+1.5%',
+    detail:'반도체 수출 +32% · 자동차 +12%',
+    source:'관세청 · 6/1 06:00', tone:'bull' },
+  '2026-06-05/NFP': {
+    actual:'175K', forecast:'180K', previous:'200K',
+    detail:'실업률 4.1% (예상 4.0%)',
+    source:'BLS via FRED · 6/5 21:30', tone:'bull' },
+};
+let RESULTS = { ...RESULTS_SAMPLE };
+
+// Phase 3.1.1: 매 시간 GitHub Actions가 ./results.json 갱신
+fetch('./results.json', { cache:'no-cache' })
+  .then(r => r.ok ? r.json() : null)
+  .then(data => {
+    if (data && data.results) {
+      RESULTS = { ...RESULTS_SAMPLE, ...data.results };
+      // 현재 화면 재렌더
+      if (document.getElementById('screen-cal').classList.contains('active')) renderSheet();
+      if (document.getElementById('screen-today').classList.contains('active')) renderTodayScreen();
+    }
+  })
+  .catch(()=>{});  // 파일 없으면 샘플만 사용
+
+function resultKey(ev) { return `${ev.s}/${ev.t}`; }
+function renderResult(ev) {
+  const r = RESULTS[resultKey(ev)];
+  const dt = parseYmd(ev.s);
+  const released = dt < today;
+  if (!r) {
+    if (released) {
+      return `<div class="result-row pending">
+        <div class="head"><span class="ic">📊</span><span class="lbl">결과</span>
+          <span class="ago">데이터 수집 중</span></div>
+        <div class="body">발표값 자동 수집 — Phase 3.1.1 (GitHub Actions cron)</div>
+      </div>`;
+    }
+    const ms = dt.getTime() - today.getTime();
+    const days = Math.floor(ms / 86400000);
+    const dStr = days === 0 ? '오늘' : days === 1 ? '내일' : `D-${days}`;
+    return `<div class="result-row pending">
+      <div class="head"><span class="ic">📊</span><span class="lbl">결과</span>
+        <span class="ago">${dStr}</span></div>
+      <div class="body">발표 전 · 예상치 확인 중</div>
+    </div>`;
+  }
+  const toneText = { bull:'🟢 호재', bear:'🔴 악재', neutral:'⚪ 중립' };
+  return `<div class="result-row done ${r.tone||'neutral'}">
+    <div class="head"><span class="ic">📊</span><span class="lbl">결과</span>
+      <span class="ago">${r.source||''}</span></div>
+    <div class="actual">${r.actual}</div>
+    <div class="compare">예상 ${r.forecast||'—'} · 이전 ${r.previous||'—'}${r.detail ? ' · ' + r.detail : ''}</div>
+    <div class="tone">${toneText[r.tone] || '중립'}</div>
+  </div>`;
+}
+
 // 짧은 칩 라벨 (각 이벤트 종류별)
 const SHORT = {
   FOMC:'FOMC', CPI:'CPI', NFP:'NFP', PCE:'PCE',
@@ -944,6 +1039,7 @@ function renderEvent(ev) {
       <div class="scen bull"><span class="lbl">호재</span><span class="txt">${tpl.bull}</span></div>
       <div class="scen bear"><span class="lbl">악재</span><span class="txt">${tpl.bear}</span></div>
       <div class="scen tip"><span class="lbl">팁</span><span class="txt">${tpl.tip}</span></div>
+      ${renderResult(ev)}
     </div>`;
 }
 
