@@ -424,6 +424,55 @@
   .step.ok .status { background:var(--sig-g-bg); color:var(--sig-g); }
   .step.idle .status { background:var(--bg-soft); color:var(--ink-3); }
 
+  /* 시나리오 토글 — v2.3.0 (default 접힘, 가독성 회복) */
+  .scen-toggle { display:flex; align-items:center; gap:6px; margin-top:10px;
+    padding:9px 12px; background:var(--bg-soft); border:0; border-radius:var(--r-md);
+    color:var(--ink-2); font-size:12.5px; font-weight:700; letter-spacing:-0.005em;
+    width:100%; text-align:left; transition:background .15s; }
+  .scen-toggle:active { background:var(--line); }
+  .scen-toggle .arr { display:inline-block; transition:transform .2s;
+    font-size:10px; color:var(--ink-3); }
+  .scen-wrap { display:none; margin-top:8px; }
+  .ev[data-open="1"] .scen-wrap { display:block; }
+  .ev[data-open="1"] .scen-toggle .arr { transform:rotate(90deg); }
+  .ev[data-open="1"] .scen-toggle { background:transparent; padding:9px 4px 4px;
+    color:var(--ink-3); font-size:11px; letter-spacing:0.04em; text-transform:uppercase; }
+
+  /* 오늘 탭 한 줄 요약 미니 행 — v2.3.0 */
+  .mini-row { display:flex; align-items:center; gap:10px; padding:13px 4px;
+    border-top:1px solid var(--line-soft); cursor:pointer; }
+  .mini-row:first-child { border-top:0; }
+  .mini-row .gd-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .mini-row .gd-dot.S { background:var(--s); }
+  .mini-row .gd-dot.A { background:var(--a); }
+  .mini-row .gd-dot.B { background:var(--b); }
+  .mini-row .gd-dot.C { background:var(--c); }
+  .mini-row .mr-dt { font-size:12px; color:var(--ink-3); font-weight:700;
+    flex:0 0 46px; font-variant-numeric:tabular-nums; }
+  .mini-row .mr-ti { font-size:14px; color:var(--ink); font-weight:600;
+    flex:1; letter-spacing:-0.005em;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mini-row .mr-res { font-size:11px; font-weight:800; padding:3px 7px;
+    border-radius:5px; flex-shrink:0; font-variant-numeric:tabular-nums; }
+  .mini-row .mr-res.bear { background:var(--bear-bg); color:var(--bear); }
+  .mini-row .mr-res.bull { background:var(--bull-bg); color:var(--bull); }
+  .mini-row .mr-res.neutral { background:var(--bg-soft); color:var(--ink-3); }
+  .mini-row .mr-res.pending { background:var(--accent-soft); color:var(--accent); }
+  .mini-row .chev { color:var(--ink-4); font-size:13px; }
+
+  /* 오늘 탭 hero label — 어제/그저께/D-N 동적 (v2.3.0) */
+  .today-hero .label { transition:color .2s; }
+  .today-hero.past .label { color:var(--accent); }
+  .today-hero.future .label { color:var(--ink-3); }
+
+  /* 첫 클릭 toast (v2.3.0) */
+  .toast { position:fixed; left:50%; bottom:84px; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:white; font-size:12.5px; font-weight:600;
+    padding:10px 14px; border-radius:999px; z-index:80;
+    opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+    box-shadow:0 8px 24px -8px rgba(10,10,10,0.3); letter-spacing:-0.005em; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
   /* 결과 row — L4 확장 (v2.1.0) */
   .result-row { margin-top:8px; padding:11px 12px; border-radius:var(--r-md);
     background:var(--bg-soft); border:1px solid var(--line); }
@@ -532,27 +581,12 @@
     <div class="more">탭하면 7단계 자세히 보기 →</div>
   </button>
 
-  <!-- 한 줄 코멘트 -->
-  <div class="comment-card">
-    <div class="lbl">💬 오늘 한 줄</div>
-    <div class="body" id="comment-body">
-      환율 1540 돌파로 외인 헤지매도 가속. 6/11 ECB · 6/12 네마녀까지 변동성 고점. <b>S급 위주 보수적 대응.</b>
-    </div>
-  </div>
+  <!-- v2.3.0 다이어트: 카운트다운·한줄코멘트 제거 (이번주 리스트가 둘 다 대체)
+       Phase 3.3에 AI 한 줄 코멘트 부활 예정 -->
 
-  <!-- 다음 S급 카운트다운 -->
-  <div class="countdown" id="countdown" onclick="goNextS()">
-    <div class="ic">⏰</div>
-    <div class="col">
-      <div class="top">다음 S급까지</div>
-      <div class="num" id="cd-num">— —시간</div>
-      <div class="bot" id="cd-bot">—</div>
-    </div>
-  </div>
-
-  <!-- 이번 주 S급 리스트 -->
+  <!-- 이번 주 S급 리스트 (다음 S 카운트도 헤더에 통합) -->
   <div class="home-list">
-    <div class="h">이번 주 S급 일정</div>
+    <div class="h" id="home-list-h">이번 주 S급 일정</div>
     <div id="home-list-body"></div>
   </div>
 </section>
@@ -658,7 +692,7 @@
     <h3>데이터</h3>
     <div class="s-group">
       <div class="s-row"><div><div class="lbl">버전</div></div>
-        <div class="sub" id="ver">v2.2.0 — 과거 6개월 결과 박힘</div></div>
+        <div class="sub" id="ver">v2.3.0 — 시간여행 + 가독성 다이어트</div></div>
       <div class="s-row"><div><div class="lbl">등록된 이벤트</div></div>
         <div class="sub" id="ev-count">— 개</div></div>
       <div class="s-row"><div><div class="lbl">데이터 기간</div></div>
@@ -1135,19 +1169,31 @@ function renderEvent(ev) {
   const dur = ev.e ? `${ev.s.slice(5).replace('-','/')}~${ev.e.slice(5).replace('-','/')}` : '';
   const segs = Array.from({length:10}, (_,i) =>
     `<div class="seg${i<g.bar?' on':''}"></div>`).join('');
+  // v2.3.0 — 호재/악재/팁은 [더보기] 토글 안으로
   return `
-    <div class="ev ${ev.g}">
+    <div class="ev ${ev.g}" data-open="0">
       <div class="ev-row1">
         <span class="grade ${ev.g}"><span class="gd"></span>${g.label}</span>
         <div class="ev-title">${ev.title}</div>
       </div>
       <div class="ev-meta">${g.name}${dur ? ' <span class="sep">·</span> ' + dur : ''}</div>
       <div class="gauge">${segs}</div>
-      <div class="scen bull"><span class="lbl">호재</span><span class="txt">${tpl.bull}</span></div>
-      <div class="scen bear"><span class="lbl">악재</span><span class="txt">${tpl.bear}</span></div>
-      <div class="scen tip"><span class="lbl">팁</span><span class="txt">${tpl.tip}</span></div>
       ${renderResult(ev)}
+      <button class="scen-toggle" onclick="toggleEv(this)">
+        <span class="arr">▸</span><span class="lbl-txt">시나리오 보기</span>
+      </button>
+      <div class="scen-wrap">
+        <div class="scen bull"><span class="lbl">호재</span><span class="txt">${tpl.bull}</span></div>
+        <div class="scen bear"><span class="lbl">악재</span><span class="txt">${tpl.bear}</span></div>
+        <div class="scen tip"><span class="lbl">팁</span><span class="txt">${tpl.tip}</span></div>
+      </div>
     </div>`;
+}
+function toggleEv(btn) {
+  const ev = btn.closest('.ev');
+  const open = ev.dataset.open === '1';
+  ev.dataset.open = open ? '0' : '1';
+  btn.querySelector('.lbl-txt').textContent = open ? '시나리오 보기' : '시나리오';
 }
 
 function changeMonth(delta) {
@@ -1163,58 +1209,173 @@ function goToday() {
 }
 
 // ====================================================================
-// 오늘 화면
+// 오늘 화면 — v2.3.0: 시간여행 (선택일 기반) + 한 줄 요약 리스트
 // ====================================================================
+let selectedTodayDay = null;  // null = 오늘 기본
+
+function dayLabel(k) {
+  const d = parseYmd(k);
+  const tk = ymd(today);
+  const diff = Math.round((d.getTime() - today.getTime()) / 86400000);
+  if (diff === 0)  return { tag:'오늘',   cls:'' };
+  if (diff === -1) return { tag:'어제',   cls:'past' };
+  if (diff === -2) return { tag:'그저께', cls:'past' };
+  if (diff < 0)    return { tag:`D-${-diff}`, cls:'past' };
+  if (diff === 1)  return { tag:'내일',   cls:'future' };
+  if (diff === 2)  return { tag:'모레',   cls:'future' };
+  return { tag:`D+${diff}`, cls:'future' };
+}
+
 function renderTodayScreen() {
+  const sel = selectedTodayDay || ymd(today);
+  const selD = parseYmd(sel);
+  const lab = dayLabel(sel);
+
+  // hero
+  const hero = document.querySelector('#screen-today .today-hero');
+  hero.classList.remove('past', 'future');
+  if (lab.cls) hero.classList.add(lab.cls);
+  document.getElementById('today-label').textContent = lab.tag;
   document.getElementById('today-date').textContent =
-    `${today.getMonth()+1}월 ${today.getDate()}일`;
+    `${selD.getMonth()+1}월 ${selD.getDate()}일`;
   document.getElementById('today-sub').textContent =
-    `${today.getFullYear()}년 · ${WD[today.getDay()]}요일`;
+    `${selD.getFullYear()}년 · ${WD[selD.getDay()]}요일`;
+
+  // week strip: 오늘 -7 ~ +7 (15개), 선택일 중앙 정렬
   const strip = document.getElementById('week-strip');
   strip.innerHTML = '';
-  const base = new Date(today); base.setDate(today.getDate() - today.getDay());
-  for (let i=0;i<14;i++) {
-    const d = new Date(base); d.setDate(base.getDate()+i);
+  for (let i = -7; i <= 7; i++) {
+    const d = new Date(today); d.setDate(today.getDate() + i);
     const k = ymd(d);
     const evs = (byDate[k] || []).slice().sort((a,b)=>ORD[a.g]-ORD[b.g]);
     const dotsHtml = evs.slice(0,4).map(e=>`<div class="dot ${e.g}"></div>`).join('');
     const pill = document.createElement('button');
-    pill.className = 'pill' + (k===ymd(today) ? ' active' : '');
+    pill.className = 'pill' + (k === sel ? ' active' : '');
+    if (k === ymd(today)) pill.classList.add('is-today');
     pill.innerHTML = `<div class="d">${WD[d.getDay()]}</div><div class="n">${d.getDate()}</div><div class="grades">${dotsHtml}</div>`;
     pill.onclick = () => {
-      selected = k;
-      viewY = d.getFullYear(); viewM = d.getMonth();
-      switchTab('cal'); renderMonth(); renderSheet();
+      selectedTodayDay = k;
+      renderTodayScreen();
+      showStripTipOnce();
+      // 선택 pill 가운데로 스크롤
+      setTimeout(() => pill.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}), 50);
     };
     strip.appendChild(pill);
   }
+  // 첫 진입 시 선택일을 가운데로
+  setTimeout(() => {
+    const active = strip.querySelector('.pill.active');
+    if (active) active.scrollIntoView({behavior:'auto', inline:'center', block:'nearest'});
+  }, 30);
 
-  const upcoming = [];
-  for (let off=0; off<60 && upcoming.length<8; off++) {
-    const d = new Date(today); d.setDate(today.getDate()+off);
-    const k = ymd(d);
-    (byDate[k] || []).forEach(ev => upcoming.push({...ev, k, off}));
+  // 헤더 + 이벤트 리스트
+  const isPast = selD < today;
+  const isToday = sel === ymd(today);
+  const headerLabel = document.querySelector('#screen-today .upcoming-label h3');
+  if (headerLabel) {
+    headerLabel.textContent = isToday ? '오늘 일정'
+                            : isPast ? `${lab.tag} 일정 · 결과 확인`
+                            : `${lab.tag} 일정 · 다가옴`;
   }
-  upcoming.sort((a,b)=> a.k===b.k ? ORD[a.g]-ORD[b.g] : a.k.localeCompare(b.k));
-  const root = document.getElementById('today-events');
-  if (!upcoming.length) {
-    root.innerHTML = '<div class="empty-msg"><span class="ic">○</span>앞으로 60일 안에 일정이 없어요</div>';
+
+  // 선택일 이벤트 + (오늘/미래면 이후 7일 미리보기까지)
+  const evs = [];
+  if (isPast || isToday) {
+    (byDate[sel] || []).forEach(ev => evs.push({...ev, k:sel}));
   } else {
-    let lastKey = '';
-    root.innerHTML = upcoming.slice(0,8).map(ev => {
-      const d = parseYmd(ev.k);
-      let dayHeader = '';
-      if (ev.k !== lastKey) {
-        lastKey = ev.k;
-        const tag = ev.off===0 ? '오늘' : ev.off===1 ? '내일' : `D-${ev.off}`;
-        dayHeader = `<div class="upcoming-day" style="padding:18px 0 4px;">
-          <span class="d-tag">${tag}</span>
-          <span class="d-date">${d.getMonth()+1}월 ${d.getDate()}일 · ${WD[d.getDay()]}요일</span>
-        </div>`;
-      }
-      return dayHeader + renderEvent(ev);
-    }).join('');
+    // 미래는 그 날부터 +7일 미리보기 (탐색 편의)
+    for (let off = 0; off <= 7; off++) {
+      const d = new Date(selD); d.setDate(selD.getDate() + off);
+      const k = ymd(d);
+      (byDate[k] || []).forEach(ev => evs.push({...ev, k}));
+    }
   }
+  evs.sort((a,b) => a.k === b.k ? ORD[a.g] - ORD[b.g] : a.k.localeCompare(b.k));
+
+  const root = document.getElementById('today-events');
+  if (!evs.length) {
+    root.innerHTML = `<div class="empty-msg"><span class="ic">○</span>${isPast ? '이 날엔 발표된 게 없었어요' : '이 날엔 등록된 일정이 없어요'}</div>`;
+    return;
+  }
+  // v2.3.0 다이어트: 풀카드 → 한 줄 요약, 클릭하면 그 자리에서 펼침
+  root.innerHTML = evs.map((ev, idx) => renderMiniRow(ev, idx)).join('');
+}
+
+// 한 줄 요약 row (탭하면 풀카드 인플레이스 펼침)
+function renderMiniRow(ev, idx) {
+  const d = parseYmd(ev.k);
+  const dt = `${d.getMonth()+1}/${d.getDate()}`;
+  const r = RESULTS[resultKey(ev)];
+  let badge = '';
+  if (r) {
+    const cls = r.tone || 'neutral';
+    badge = `<span class="mr-res ${cls}">${r.actual}</span>`;
+  } else if (parseYmd(ev.s) >= today) {
+    badge = `<span class="mr-res pending">예정</span>`;
+  } else {
+    badge = `<span class="mr-res neutral">—</span>`;
+  }
+  return `<div class="mini-row" onclick="expandMiniRow(this, ${idx})" data-idx="${idx}">
+    <span class="gd-dot ${ev.g}"></span>
+    <span class="mr-dt">${dt}</span>
+    <span class="mr-ti">${ev.title}</span>
+    ${badge}
+    <span class="chev">›</span>
+  </div>`;
+}
+
+// 한 줄 → 풀카드 인플레이스 펼침 (다시 탭하면 접힘)
+function expandMiniRow(row, idx) {
+  // 이미 펼쳐진 카드 있으면 접기
+  const next = row.nextElementSibling;
+  if (next && next.classList.contains('mini-expanded')) {
+    next.remove();
+    row.classList.remove('is-expanded');
+    return;
+  }
+  // 다른 곳 펼쳐져 있으면 닫기
+  document.querySelectorAll('.mini-expanded').forEach(n => n.remove());
+  document.querySelectorAll('.mini-row.is-expanded').forEach(r => r.classList.remove('is-expanded'));
+  // 현재 위치에 풀카드 삽입
+  const evs = currentTodayEvents();
+  if (!evs[idx]) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'mini-expanded';
+  wrap.style.cssText = 'margin:2px 0 8px;';
+  wrap.innerHTML = renderEvent(evs[idx]);
+  row.after(wrap);
+  row.classList.add('is-expanded');
+}
+
+// 현재 표시 중인 오늘탭 이벤트 배열 재구성 (expandMiniRow가 참조)
+function currentTodayEvents() {
+  const sel = selectedTodayDay || ymd(today);
+  const selD = parseYmd(sel);
+  const isPast = selD < today;
+  const isToday = sel === ymd(today);
+  const evs = [];
+  if (isPast || isToday) {
+    (byDate[sel] || []).forEach(ev => evs.push({...ev, k:sel}));
+  } else {
+    for (let off = 0; off <= 7; off++) {
+      const d = new Date(selD); d.setDate(selD.getDate() + off);
+      const k = ymd(d);
+      (byDate[k] || []).forEach(ev => evs.push({...ev, k}));
+    }
+  }
+  return evs.sort((a,b) => a.k === b.k ? ORD[a.g] - ORD[b.g] : a.k.localeCompare(b.k));
+}
+
+// 첫 strip 클릭 시 한 번만 toast
+function showStripTipOnce() {
+  if (localStorage.getItem('tip_strip_seen')) return;
+  localStorage.setItem('tip_strip_seen', '1');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = '💡 strip 좌우 스크롤로 과거·미래 이동';
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 30);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(()=>t.remove(), 300); }, 3200);
 }
 
 // ====================================================================
@@ -1281,22 +1442,16 @@ function renderHome() {
   else { sig = '🟢'; card.classList.add('g'); }
   document.getElementById('trig-stage').textContent = `${sig} ${onCount}/${total}`;
 
-  // 다음 S급 카운트다운
+  // 이번주 S급 리스트 (헤더에 다음 S 카운트 통합)
   const nextS = findNextS();
+  let h = '이번 주 S급 일정';
   if (nextS) {
     const ms = parseYmd(nextS.k).getTime() - today.getTime();
-    const days = Math.floor(ms / (1000*60*60*24));
-    const hours = Math.floor((ms % (1000*60*60*24)) / (1000*60*60));
-    document.getElementById('cd-num').textContent =
-      days > 0 ? `${days}일 ${hours}시간` : (hours > 0 ? `${hours}시간` : '오늘');
-    document.getElementById('cd-bot').textContent =
-      `${nextS.title} · ${nextS.k}`;
-  } else {
-    document.getElementById('cd-num').textContent = '—';
-    document.getElementById('cd-bot').textContent = '예정된 S급 없음';
+    const days = Math.floor(ms / 86400000);
+    const cnt = days === 0 ? '오늘' : days === 1 ? '내일' : `D-${days}`;
+    h = `이번 주 S급 · 다음 ${cnt}`;
   }
-
-  // 이번주 S급 리스트
+  document.getElementById('home-list-h').textContent = h;
   renderHomeList();
 }
 
