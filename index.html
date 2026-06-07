@@ -917,7 +917,7 @@ const EVENTS = [
 function dateRange(s, e) {
   const out = [], a = new Date(s+'T00:00:00'), b = e ? new Date(e+'T00:00:00') : a;
   for (let d=new Date(a); d<=b; d.setDate(d.getDate()+1))
-    out.push(d.toISOString().slice(0,10));
+    out.push(ymd(d));
   return out;
 }
 const byDate = {};
