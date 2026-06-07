@@ -447,15 +447,20 @@
   .mini-row { display:flex; align-items:center; gap:10px; padding:13px 4px;
     border-top:1px solid var(--line-soft); cursor:pointer; }
   .mini-row:first-child { border-top:0; }
-  .mini-row .gd-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .mini-row .gd-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0;
+    align-self:flex-start; margin-top:5px; }
   .mini-row .gd-dot.S { background:var(--s); }
   .mini-row .gd-dot.A { background:var(--a); }
   .mini-row .gd-dot.B { background:var(--b); }
   .mini-row .gd-dot.C { background:var(--c); }
   .mini-row .mr-dt { font-size:12px; color:var(--ink-3); font-weight:700;
-    flex:0 0 46px; font-variant-numeric:tabular-nums; }
+    flex:0 0 46px; font-variant-numeric:tabular-nums; align-self:flex-start; padding-top:1px; }
+  .mini-row .mr-main { flex:1; min-width:0; }
   .mini-row .mr-ti { font-size:14px; color:var(--ink); font-weight:600;
-    flex:1; letter-spacing:-0.005em;
+    letter-spacing:-0.005em;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mini-row .mr-tl { font-size:11.5px; color:var(--ink-3); font-weight:500;
+    margin-top:2px; letter-spacing:-0.005em;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .mini-row .mr-res { font-size:11px; font-weight:800; padding:3px 7px;
     border-radius:5px; flex-shrink:0; font-variant-numeric:tabular-nums; }
@@ -1521,16 +1526,31 @@ function renderTodayScreen() {
       : renderQuietDay();
     return;
   }
-  // v2.3.0 다이어트: 풀카드 → 한 줄 요약, 클릭하면 그 자리에서 펼침
-  root.innerHTML = evs.map((ev, idx) => renderMiniRow(ev, idx)).join('');
+  // v2.4.0: 한 줄 요약 + "어떤 느낌인지" 한 줄 설명
+  root.innerHTML = evs.map(renderMiniRow).join('');
 }
 
-// 한 줄 요약 row (탭하면 풀카드 인플레이스 펼침)
-function renderMiniRow(ev, idx) {
+// 공통 미니 행 — 제목 아래에 한 줄 느낌(EXPLAIN.tl) 같이 노출 (v2.4.0)
+function miniRow(k, g, t, title, dtLabel, badgeHtml) {
+  const tl = (EXPLAIN[t] || {}).tl;
+  return `<div class="mini-row" onclick="openDayDetail('${k}')">
+    <span class="gd-dot ${g}"></span>
+    <span class="mr-dt">${dtLabel}</span>
+    <div class="mr-main">
+      <div class="mr-ti">${title}</div>
+      ${tl ? `<div class="mr-tl">${tl}</div>` : ''}
+    </div>
+    ${badgeHtml}
+    <span class="chev">›</span>
+  </div>`;
+}
+
+// 한 줄 요약 row (탭하면 상세 모달)
+function renderMiniRow(ev) {
   const d = parseYmd(ev.k);
   const dt = `${d.getMonth()+1}/${d.getDate()}`;
   const r = RESULTS[resultKey(ev)];
-  let badge = '';
+  let badge;
   if (r) {
     const cls = r.tone || 'neutral';
     badge = `<span class="mr-res ${cls}">${r.actual}</span>`;
@@ -1539,13 +1559,7 @@ function renderMiniRow(ev, idx) {
   } else {
     badge = `<span class="mr-res neutral">—</span>`;
   }
-  return `<div class="mini-row" onclick="openDayDetail('${ev.k}')" data-idx="${idx}">
-    <span class="gd-dot ${ev.g}"></span>
-    <span class="mr-dt">${dt}</span>
-    <span class="mr-ti">${ev.title}</span>
-    ${badge}
-    <span class="chev">›</span>
-  </div>`;
+  return miniRow(ev.k, ev.g, ev.t, ev.title, dt, badge);
 }
 
 // #3 — 일정 없는 날: "조용한 날" + 다가오는 큰 일정(D-N)
@@ -1578,14 +1592,9 @@ function renderQuietDay() {
     hero = `<div class="quiet-hero"><div class="qh-emoji">🌤️</div>
       <div class="qh-title">한동안 큰 일정이 없어요</div></div>`;
   }
-  const list = up.slice(0, 5).map(e => `
-    <div class="mini-row" onclick="openDayDetail('${e.k}')">
-      <span class="gd-dot ${e.g}"></span>
-      <span class="mr-dt">${dStr(e.off)}</span>
-      <span class="mr-ti">${e.title}</span>
-      <span class="mr-res pending">예정</span>
-      <span class="chev">›</span>
-    </div>`).join('');
+  const list = up.slice(0, 5).map(e =>
+    miniRow(e.k, e.g, e.t, e.title, dStr(e.off), '<span class="mr-res pending">예정</span>')
+  ).join('');
   return hero + (up.length ? `<div class="quiet-up-h">🔜 다가오는 큰 일정</div>${list}` : '');
 }
 
