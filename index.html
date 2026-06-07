@@ -188,12 +188,16 @@
   .scen.tip  { background:var(--tip-bg);  } .scen.tip  .lbl { color:var(--tip);  }
 
   /* ── 하단 탭 ── */
+  /* 하단 탭 — 항상 고정. backdrop-filter는 안드로이드 WebView/TWA에서
+     스크롤 시 떨림(레이어 재합성)을 유발 → 불투명 배경 + 자체 합성 레이어로 고정 */
   .tabs { position:fixed; left:0; right:0; bottom:0; z-index:100;
-    background:rgba(250,250,247,0.92);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-top:1px solid var(--line-soft); display:flex;
+    background:var(--bg-card);
+    border-top:1px solid var(--line);
+    box-shadow: 0 -1px 0 var(--line-soft), 0 -10px 28px -20px rgba(15,12,5,0.14);
+    display:flex;
     padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+    transform: translateZ(0); -webkit-transform: translateZ(0);
+    will-change: transform;
   }
   .tab { flex:1; text-align:center; padding:7px 0 4px; background:transparent;
     border:0; color:var(--ink-3); font-size:10.5px; font-weight:600;
@@ -522,6 +526,67 @@
   .pro-card .price .soon { background:rgba(255,255,255,0.15); padding:3px 7px;
     border-radius:5px; font-size:10px; font-weight:800; letter-spacing:0.05em;
     margin-left:8px; }
+
+  /* ============================================================
+     v2.4.0 — 일정 상세 모달 (큰 창: 의미·맥락·흐름·알아둘 것)
+     ============================================================ */
+  .dx { padding:4px 0 10px; border-top:1px solid var(--line); margin-top:18px; }
+  .dx:first-child { border-top:0; margin-top:0; }
+  .dx-hero { display:flex; align-items:center; gap:9px; margin:6px 0 10px; }
+  .dx-title { font-size:18px; font-weight:800; letter-spacing:-0.02em; color:var(--ink);
+    line-height:1.3; }
+  .dx-summary { font-size:13.5px; font-weight:600; color:var(--ink-2);
+    background:var(--bg-soft); border-radius:var(--r-md); padding:11px 14px;
+    line-height:1.5; margin-bottom:6px; }
+
+  .dx-sec { margin-top:16px; }
+  .dx-q { font-size:13.5px; font-weight:800; color:var(--ink); letter-spacing:-0.01em;
+    margin-bottom:7px; display:flex; align-items:center; gap:6px; }
+  .dx-p { font-size:14px; line-height:1.6; color:var(--ink-2); font-weight:500; }
+
+  /* 지금까지 흐름 — 발표값 시계열 */
+  .dx-flow { display:flex; flex-direction:column; gap:0; }
+  .dx-flow-row { display:flex; align-items:center; gap:9px; padding:9px 2px;
+    border-top:1px solid var(--line-soft); }
+  .dx-flow-row:first-child { border-top:0; }
+  .dx-flow-row .m { font-size:12px; color:var(--ink-3); font-weight:700;
+    flex:0 0 42px; font-variant-numeric:tabular-nums; }
+  .dx-flow-row .dot { width:8px; height:8px; border-radius:50%; flex:0 0 8px; }
+  .dx-flow-row.bull .dot { background:var(--bull); }
+  .dx-flow-row.bear .dot { background:var(--bear); }
+  .dx-flow-row.neutral .dot { background:var(--ink-4); }
+  .dx-flow-row .v { font-size:13.5px; font-weight:700; color:var(--ink); flex:1;
+    letter-spacing:-0.01em; font-variant-numeric:tabular-nums; }
+  .dx-flow-row .tag { font-size:10.5px; font-weight:800; padding:2px 7px;
+    border-radius:5px; flex-shrink:0; }
+  .dx-flow-row.bull .tag { background:var(--bull-bg); color:var(--bull); }
+  .dx-flow-row.bear .tag { background:var(--bear-bg); color:var(--bear); }
+  .dx-flow-row.neutral .tag { background:var(--bg-soft); color:var(--ink-3); }
+  .dx-flow-note { font-size:11.5px; color:var(--ink-3); margin-top:8px; font-weight:500; }
+
+  /* 이것도 알아두세요 */
+  .dx-watch { margin:0; padding:0; list-style:none; }
+  .dx-watch li { font-size:13.5px; line-height:1.5; color:var(--ink-2); font-weight:500;
+    padding:7px 0 7px 22px; position:relative; border-top:1px solid var(--line-soft); }
+  .dx-watch li:first-child { border-top:0; }
+  .dx-watch li::before { content:'✓'; position:absolute; left:2px; top:7px;
+    color:var(--accent); font-weight:800; font-size:12px; }
+
+  /* ── #3 오늘 탭 "조용한 날" 빈 상태 ── */
+  .quiet-hero { text-align:center; padding:16px 8px 20px; }
+  .quiet-hero .qh-emoji { font-size:36px; line-height:1; }
+  .quiet-hero .qh-title { font-size:15.5px; font-weight:800; color:var(--ink);
+    margin-top:10px; letter-spacing:-0.01em; }
+  .quiet-hero .qh-next { font-size:13px; color:var(--ink-3); font-weight:600;
+    margin-top:16px; }
+  .quiet-hero .qh-next b { color:var(--accent); font-weight:800; font-size:17px;
+    font-variant-numeric:tabular-nums; margin:0 2px; }
+  .quiet-hero .qh-ev { font-size:15px; font-weight:700; color:var(--ink); margin-top:5px;
+    letter-spacing:-0.01em; }
+  .quiet-hero .qh-tl { font-size:12.5px; color:var(--ink-3); font-weight:500; margin-top:4px; }
+  .quiet-up-h { font-size:11px; color:var(--ink-3); font-weight:700; letter-spacing:0.06em;
+    text-transform:uppercase; margin:4px 0 2px; padding:14px 2px 0;
+    border-top:1px solid var(--line-soft); }
 </style>
 </head>
 <body>
@@ -693,7 +758,7 @@
     <h3>데이터</h3>
     <div class="s-group">
       <div class="s-row"><div><div class="lbl">버전</div></div>
-        <div class="sub" id="ver">v2.3.0 — 시간여행 + 가독성 다이어트</div></div>
+        <div class="sub" id="ver">v2.4.0 — 일정 상세 모달 + 조용한 날 + 탭바 고정</div></div>
       <div class="s-row"><div><div class="lbl">등록된 이벤트</div></div>
         <div class="sub" id="ev-count">— 개</div></div>
       <div class="s-row"><div><div class="lbl">데이터 기간</div></div>
@@ -750,6 +815,17 @@
       ※ 임계값은 코스피 2020~2025 백테스트 v0.1 초안. v1.0은 Phase 3.2에 튜닝.
     </div>
   </div>
+</div>
+
+<!-- ============ 일정 상세 모달 (v2.4.0 — 큰 창으로 의미·맥락·흐름) ============ -->
+<div class="modal-mask" id="detail-mask" onclick="closeDetail()"></div>
+<div class="modal-sheet" id="detail-sheet" role="dialog" aria-modal="true" aria-labelledby="detail-ttl">
+  <div class="modal-grip"></div>
+  <div class="modal-head">
+    <div class="ttl" id="detail-ttl">일정 상세</div>
+    <button class="close" onclick="closeDetail()" aria-label="닫기">✕</button>
+  </div>
+  <div class="modal-body" id="detail-body"></div>
 </div>
 
 <!-- ============ 하단 탭 (v2.0.0 — 4개) ============ -->
@@ -812,6 +888,62 @@ const TPL = {
   JACKSON:{bull:'의장 비둘기 시그널 → 글로벌 위험자산 랠리',
            bear:'의장 매파 시그널("higher for longer") → 글로벌 동시 하락',
            tip:'매년 8월 말 와이오밍. 연준 의장 기조연설이 하반기 정책 시그널'},
+};
+
+// ====================================================================
+// 이벤트 종류별 "쉬운 설명" — 중딩도 이해 (v2.4.0 상세 모달용)
+//   tl    = 한 줄 요약(L0)   what = 이게 뭐예요   why = 왜 중요해요
+//   watch = 이것도 알아두세요(관련 개념)
+// ====================================================================
+const EXPLAIN = {
+  FOMC: { tl:'미국 금리 결정 — 시장 영향력 1위',
+    what:'미국 중앙은행(연준)이 기준금리를 정하는 회의예요. 1년에 8번 열려요.',
+    why:'미국 금리가 오르면 전 세계 돈이 미국으로 몰려서 한국 주식이 빠지고 환율이 올라요. 모든 경제 일정 중 영향력 1위.',
+    watch:['점도표 — 위원들이 찍는 “앞으로 금리” 점 그래프','성명서 문구가 지난번과 어떻게 바뀌었나','의장 기자회견 말투(매파=긴축 / 비둘기=완화)'] },
+  CPI: { tl:'미국 물가 — 예상보다 높으면 악재',
+    what:'미국 물가가 1년 전보다 얼마나 올랐는지 보여주는 숫자예요.',
+    why:'예상보다 높으면 “금리를 더 오래 높게” → 주식엔 악재. 낮으면 “곧 금리 내릴 듯” → 호재.',
+    watch:['Core CPI — 식품·에너지 뺀 진짜 물가','예상치보다 높았나 낮았나(서프라이즈)','3개월 연속 방향이 더 중요'] },
+  NFP: { tl:'미국 고용 — 너무 강하면 오히려 악재',
+    what:'미국에서 한 달 동안 늘어난 일자리 수예요(농업 제외).',
+    why:'일자리가 너무 많으면 경기 과열 → 금리 인하가 늦어져 주식 악재. “좋은 뉴스가 나쁜 뉴스” 역설이 나와요.',
+    watch:['실업률','시간당 임금 상승률(임금 오르면 물가 자극)','예상치 대비'] },
+  PCE: { tl:'연준이 가장 신뢰하는 물가 지표',
+    what:'연준이 CPI보다 더 믿고 보는 물가 지표예요.',
+    why:'연준이 실제로 금리 결정 때 참고하는 숫자라, 여기서 물가가 잡히면 금리 인하 기대가 커져요.',
+    watch:['Core PCE','예상치 대비','CPI와 방향이 같은지'] },
+  KR_TRADE: { tl:'한국 수출 — 반도체가 코스피를 끈다',
+    what:'한국이 한 달간 수출·수입을 얼마나 했는지예요(매월 1일 새벽 발표).',
+    why:'반도체가 수출의 약 20%. 반도체 수출이 좋으면 삼성·하이닉스가 코스피를 끌어올려요.',
+    watch:['반도체 수출 증감률','무역수지(흑자/적자)','전년 같은 달 대비'] },
+  KR_BOK: { tl:'한국 금리 결정 — 환율이 발목',
+    what:'한국은행이 우리나라 기준금리를 정하는 회의(금통위)예요. 연 8번.',
+    why:'금리를 내리면 빚 부담↓·소비↑ → 내수주 호재. 단 환율이 너무 높으면 못 내려요.',
+    watch:['미국(Fed)과의 금리 차이','환율 수준(1,500원 넘으면 부담)','만장일치인지·소수의견 있는지'] },
+  BOJ: { tl:'일본 금리 — 엔 캐리 청산 주의',
+    what:'일본 중앙은행의 금리 결정이에요.',
+    why:'일본이 금리를 올리면 “엔 캐리 청산”(싼 엔화로 굴리던 돈이 빠짐) → 신흥국이 같이 떨어질 위험이 있어요.',
+    watch:['엔/달러 환율','금리 인상 시사 여부','글로벌 유동성'] },
+  EU_CPI: { tl:'유럽 물가 — 달러 방향에 영향',
+    what:'유로존(유럽) 물가 속보치예요(매월 말).',
+    why:'유럽 물가가 높으면 ECB가 긴축 → 유로↑·달러↓ → 신흥국·한국 증시에 우호적이에요.',
+    watch:['Core CPI','달러인덱스(DXY) 방향','ECB 금리 기대'] },
+  WITCH: { tl:'선물·옵션 동시만기 — 장 막판 변동성↑',
+    what:'주가지수 선물·옵션 4가지가 동시에 만기되는 날이에요(3·6·9·12월).',
+    why:'대량 청산 물량이 한꺼번에 쏟아져 장 막판 변동성이 커져요. 당일 신규 진입은 자제가 좋아요.',
+    watch:['외국인 선물 포지션','장 마감 동시호가','프로그램 매매 방향'] },
+  KR_OPT: { tl:'한국 옵션만기 — 보통 영향 작음',
+    what:'한국 월간 옵션 만기일이에요(매월 둘째 목요일).',
+    why:'네마녀의날이 아닌 달은 보통 영향이 작아요. 단 외국인 매도가 쌓여 있으면 청산이 빨라질 수 있어요.',
+    watch:['외국인 누적 순매도','풋콜 비율'] },
+  US_OPT: { tl:'미국 옵션만기 — 다음날 갭 주의',
+    what:'미국 주가지수(SPX) 옵션 만기일이에요(셋째 금요일).',
+    why:'대규모 풋 청산이 나오면 미국發 변동성 → 다음날 코스피가 갭다운으로 시작할 수 있어요.',
+    watch:['VIX(공포지수)','SPX 포지션 쏠림'] },
+  JACKSON: { tl:'연준 의장 연설 — 하반기 정책 신호',
+    what:'매년 8월 말 미국 와이오밍에서 열리는 중앙은행 심포지엄이에요.',
+    why:'연준 의장의 기조연설이 하반기 통화정책 방향을 미리 알려줘요.',
+    watch:['의장 발언 톤(매파/비둘기)','“higher for longer” 언급 여부','글로벌 위험자산 반응'] },
 };
 
 const EVENTS = [
@@ -916,6 +1048,7 @@ const EVENTS = [
 // ====================================================================
 function dateRange(s, e) {
   const out = [], a = new Date(s+'T00:00:00'), b = e ? new Date(e+'T00:00:00') : a;
+  // ⚠️ toISOString()은 UTC라 KST(UTC+9)에서 날짜가 하루 밀린다 → 로컬 ymd() 사용
   for (let d=new Date(a); d<=b; d.setDate(d.getDate()+1))
     out.push(ymd(d));
   return out;
@@ -1144,7 +1277,7 @@ function renderMonth() {
     }
     cell.appendChild(chips);
 
-    cell.onclick = () => { selected = k; renderMonth(); renderSheet(); };
+    cell.onclick = () => { selected = k; renderMonth(); renderSheet(); openDayDetail(k); };
     grid.appendChild(cell);
   }
 }
@@ -1194,6 +1327,95 @@ function toggleEv(btn) {
   const open = ev.dataset.open === '1';
   ev.dataset.open = open ? '0' : '1';
   btn.querySelector('.lbl-txt').textContent = open ? '시나리오 보기' : '시나리오';
+}
+
+// ====================================================================
+// v2.4.0 — 일정 상세 모달 (큰 창: 의미·맥락·흐름·알아둘 것)
+// ====================================================================
+const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const TONE_TAG = { bull:'호재', bear:'악재', neutral:'중립' };
+
+// 같은 종류(템플릿) 이벤트의 과거 발표값을 시간순으로 — "지금까지 흐름"
+function flowTimeline(tpl) {
+  return Object.entries(RESULTS)
+    .filter(([k]) => k.endsWith('/' + tpl))
+    .map(([k, v]) => ({ date: k.split('/')[0], ...v }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+// 큰 카드 한 장 (모달 안에 들어가는 본문)
+function renderRichEvent(ev) {
+  const g = GRADE[ev.g];
+  const ex = EXPLAIN[ev.t] || {};
+  const tpl = TPL[ev.t] || { bull:'', bear:'', tip:'' };
+  const dur = ev.e ? `${ev.s.slice(5).replace('-','/')}~${ev.e.slice(5).replace('-','/')}` : '';
+
+  // 지금까지 흐름 (발표값 2개 이상일 때만)
+  const flow = flowTimeline(ev.t);
+  let flowHtml = '';
+  if (flow.length >= 2) {
+    const recent = flow.slice(-6);
+    const rows = recent.map(f => {
+      const tone = f.tone || 'neutral';
+      const m = MONTH_KO[parseYmd(f.date).getMonth()];
+      return `<div class="dx-flow-row ${tone}">
+        <span class="m">${m}</span><span class="dot"></span>
+        <span class="v">${f.actual}</span>
+        <span class="tag">${TONE_TAG[tone]}</span>
+      </div>`;
+    }).join('');
+    flowHtml = `<div class="dx-sec">
+      <div class="dx-q">📈 지금까지 흐름</div>
+      <div class="dx-flow">${rows}</div>
+      ${flow.length > 6 ? `<div class="dx-flow-note">최근 6회만 표시 · 총 ${flow.length}회 발표</div>` : ''}
+    </div>`;
+  }
+
+  const watchHtml = (ex.watch && ex.watch.length)
+    ? `<div class="dx-sec"><div class="dx-q">🧠 이것도 알아두세요</div>
+        <ul class="dx-watch">${ex.watch.map(w => `<li>${w}</li>`).join('')}</ul></div>`
+    : '';
+
+  return `
+    <div class="dx ${ev.g}">
+      <div class="dx-hero">
+        <span class="grade ${ev.g}"><span class="gd"></span>${g.label}</span>
+        <div class="dx-title">${ev.title}</div>
+      </div>
+      <div class="dx-summary">${g.name}${dur ? ' · ' + dur : ''}${ex.tl ? ' · ' + ex.tl : ''}</div>
+
+      ${ex.what ? `<div class="dx-sec"><div class="dx-q">📖 이게 뭐예요?</div><div class="dx-p">${ex.what}</div></div>` : ''}
+      ${ex.why ? `<div class="dx-sec"><div class="dx-q">💥 왜 중요해요?</div><div class="dx-p">${ex.why}</div></div>` : ''}
+      ${flowHtml}
+      <div class="dx-sec">${renderResult(ev)}</div>
+      ${watchHtml}
+
+      <div class="dx-sec">
+        <div class="dx-q">🎬 이렇게 움직일 수 있어요</div>
+        <div class="scen bull"><span class="lbl">호재</span><span class="txt">${tpl.bull}</span></div>
+        <div class="scen bear" style="margin-top:6px;"><span class="lbl">악재</span><span class="txt">${tpl.bear}</span></div>
+        <div class="scen tip" style="margin-top:6px;"><span class="lbl">팁</span><span class="txt">${tpl.tip}</span></div>
+      </div>
+    </div>`;
+}
+
+function openDayDetail(k) {
+  const evs = (byDate[k] || []).slice().sort((a, b) => ORD[a.g] - ORD[b.g]);
+  if (!evs.length) return;
+  const d = parseYmd(k);
+  document.getElementById('detail-ttl').textContent =
+    `${d.getMonth()+1}월 ${d.getDate()}일 (${WD[d.getDay()]})${evs.length > 1 ? ' · ' + evs.length + '개' : ''}`;
+  document.getElementById('detail-body').innerHTML = evs.map(renderRichEvent).join('');
+  document.getElementById('detail-mask').classList.add('show');
+  const sheet = document.getElementById('detail-sheet');
+  sheet.classList.add('show');
+  sheet.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+function closeDetail() {
+  document.getElementById('detail-mask').classList.remove('show');
+  document.getElementById('detail-sheet').classList.remove('show');
+  document.body.style.overflow = '';
 }
 
 function changeMonth(delta) {
@@ -1294,7 +1516,9 @@ function renderTodayScreen() {
 
   const root = document.getElementById('today-events');
   if (!evs.length) {
-    root.innerHTML = `<div class="empty-msg"><span class="ic">○</span>${isPast ? '이 날엔 발표된 게 없었어요' : '이 날엔 등록된 일정이 없어요'}</div>`;
+    root.innerHTML = isPast
+      ? `<div class="empty-msg"><span class="ic">○</span>이 날엔 발표된 게 없었어요</div>`
+      : renderQuietDay();
     return;
   }
   // v2.3.0 다이어트: 풀카드 → 한 줄 요약, 클릭하면 그 자리에서 펼침
@@ -1315,7 +1539,7 @@ function renderMiniRow(ev, idx) {
   } else {
     badge = `<span class="mr-res neutral">—</span>`;
   }
-  return `<div class="mini-row" onclick="expandMiniRow(this, ${idx})" data-idx="${idx}">
+  return `<div class="mini-row" onclick="openDayDetail('${ev.k}')" data-idx="${idx}">
     <span class="gd-dot ${ev.g}"></span>
     <span class="mr-dt">${dt}</span>
     <span class="mr-ti">${ev.title}</span>
@@ -1324,46 +1548,45 @@ function renderMiniRow(ev, idx) {
   </div>`;
 }
 
-// 한 줄 → 풀카드 인플레이스 펼침 (다시 탭하면 접힘)
-function expandMiniRow(row, idx) {
-  // 이미 펼쳐진 카드 있으면 접기
-  const next = row.nextElementSibling;
-  if (next && next.classList.contains('mini-expanded')) {
-    next.remove();
-    row.classList.remove('is-expanded');
-    return;
+// #3 — 일정 없는 날: "조용한 날" + 다가오는 큰 일정(D-N)
+function dStr(off) { return off === 0 ? '오늘' : off === 1 ? '내일' : off === 2 ? '모레' : `D-${off}`; }
+function renderQuietDay() {
+  // 오늘 이후 다가오는 일정 수집 (등급순으로 그날의 대표 노출)
+  const up = [], seen = new Set();
+  for (let off = 1; off <= 28 && up.length < 5; off++) {
+    const d = new Date(today); d.setDate(today.getDate() + off);
+    const k = ymd(d);
+    (byDate[k] || []).slice().sort((a, b) => ORD[a.g] - ORD[b.g])
+      .forEach(e => {
+        if (seen.has(e.title)) return;   // 이틀짜리(FOMC 등) 중복 방지
+        seen.add(e.title);
+        up.push({ ...e, k, off });
+      });
   }
-  // 다른 곳 펼쳐져 있으면 닫기
-  document.querySelectorAll('.mini-expanded').forEach(n => n.remove());
-  document.querySelectorAll('.mini-row.is-expanded').forEach(r => r.classList.remove('is-expanded'));
-  // 현재 위치에 풀카드 삽입
-  const evs = currentTodayEvents();
-  if (!evs[idx]) return;
-  const wrap = document.createElement('div');
-  wrap.className = 'mini-expanded';
-  wrap.style.cssText = 'margin:2px 0 8px;';
-  wrap.innerHTML = renderEvent(evs[idx]);
-  row.after(wrap);
-  row.classList.add('is-expanded');
-}
-
-// 현재 표시 중인 오늘탭 이벤트 배열 재구성 (expandMiniRow가 참조)
-function currentTodayEvents() {
-  const sel = selectedTodayDay || ymd(today);
-  const selD = parseYmd(sel);
-  const isPast = selD < today;
-  const isToday = sel === ymd(today);
-  const evs = [];
-  if (isPast || isToday) {
-    (byDate[sel] || []).forEach(ev => evs.push({...ev, k:sel}));
+  const head = up[0];
+  let hero;
+  if (head) {
+    const ex = EXPLAIN[head.t] || {};
+    hero = `<div class="quiet-hero">
+      <div class="qh-emoji">🌤️</div>
+      <div class="qh-title">오늘은 큰 발표가 없는 조용한 날이에요</div>
+      <div class="qh-next">다음 큰 일정까지 <b>${dStr(head.off)}</b></div>
+      <div class="qh-ev">${head.title}</div>
+      ${ex.tl ? `<div class="qh-tl">${ex.tl}</div>` : ''}
+    </div>`;
   } else {
-    for (let off = 0; off <= 7; off++) {
-      const d = new Date(selD); d.setDate(selD.getDate() + off);
-      const k = ymd(d);
-      (byDate[k] || []).forEach(ev => evs.push({...ev, k}));
-    }
+    hero = `<div class="quiet-hero"><div class="qh-emoji">🌤️</div>
+      <div class="qh-title">한동안 큰 일정이 없어요</div></div>`;
   }
-  return evs.sort((a,b) => a.k === b.k ? ORD[a.g] - ORD[b.g] : a.k.localeCompare(b.k));
+  const list = up.slice(0, 5).map(e => `
+    <div class="mini-row" onclick="openDayDetail('${e.k}')">
+      <span class="gd-dot ${e.g}"></span>
+      <span class="mr-dt">${dStr(e.off)}</span>
+      <span class="mr-ti">${e.title}</span>
+      <span class="mr-res pending">예정</span>
+      <span class="chev">›</span>
+    </div>`).join('');
+  return hero + (up.length ? `<div class="quiet-up-h">🔜 다가오는 큰 일정</div>${list}` : '');
 }
 
 // 첫 strip 클릭 시 한 번만 toast
@@ -1482,7 +1705,7 @@ function renderHomeList() {
     const d = parseYmd(ev.k);
     const dt = ev.off === 0 ? '오늘' : ev.off === 1 ? '내일' :
                `${d.getMonth()+1}/${d.getDate()}`;
-    return `<div class="item" onclick="goEvent('${ev.k}')">
+    return `<div class="item" onclick="openDayDetail('${ev.k}')">
       <div class="dt">${dt}</div>
       <div class="ti">${ev.title}</div>
       <div class="gd S">S</div>
@@ -1568,7 +1791,7 @@ renderSheet();
 
 // ESC로 모달 닫기
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeTriggerModal();
+  if (e.key === 'Escape') { closeTriggerModal(); closeDetail(); }
 });
 
 // 서비스 워커 — 즉시 갱신

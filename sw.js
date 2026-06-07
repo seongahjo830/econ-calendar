@@ -1,6 +1,6 @@
-// 경제캘린더 PWA 서비스 워커 v2.3.0 — 시간여행(어제·그저께 보기) + 가독성 다이어트
+// 경제캘린더 PWA 서비스 워커 v2.4.0 — 일정 상세 모달 + 조용한 날 + 탭바 고정
 // 전략: Network First → 캐시 폴백 (오프라인 동작 유지 + 업데이트 즉시 전파)
-const CACHE = 'econ-cal-v2.3.0';
+const CACHE = 'econ-cal-v2.4.0';
 const PRECACHE = ['./', './index.html', './manifest.json',
                   './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
