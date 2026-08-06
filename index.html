@@ -905,6 +905,25 @@
 .onb-card .oc-t{display:flex;flex-direction:column}
 .onb-card .oc-t b{font-size:14.5px;color:var(--ink)}
 .onb-card .oc-t span{font-size:12px;color:var(--sub);margin-top:2px}
+
+/* ── v7 뉴스 ── */
+.nw-chips{display:flex;gap:6px;padding:10px 16px 4px;overflow-x:auto}
+.nw-chips::-webkit-scrollbar{display:none}
+.nw-chip{flex:none;border:1.5px solid var(--line);background:#fff;color:var(--sub);
+  border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.nw-chip.on{background:rgba(59,110,220,.10);border-color:var(--accent);color:var(--accent);font-weight:800}
+.nw-meta{padding:4px 16px 8px;font-size:11.5px;color:var(--sub);font-weight:600}
+.nw-card{display:block;margin:0 16px 9px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:13px 14px;text-decoration:none;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.nw-tags{display:flex;gap:5px;margin-bottom:7px}
+.nw-cat{font-size:10.5px;font-weight:800;color:var(--accent);background:rgba(59,110,220,.10);border-radius:6px;padding:3px 7px}
+.nw-t{font-size:10.5px;font-weight:800;border-radius:6px;padding:3px 7px}
+.nw-t.up{background:#ffe3e3;color:#c92a2a}
+.nw-t.down{background:#e3f2ff;color:#1864ab}
+.nw-ti{font-size:14.5px;font-weight:800;color:var(--ink);line-height:1.45}
+.nw-d{margin-top:6px;font-size:12.5px;line-height:1.6;color:var(--sub);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nw-ft{display:flex;justify-content:space-between;margin-top:9px;font-size:11.5px;color:var(--ink-3,#9aa3b2);font-weight:600}
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -1202,9 +1221,21 @@
     <span class="ic">📅</span>캘린더</button>
   <button class="tab" data-screen="today" onclick="switchTab('today')">
     <span class="ic">⚡</span>오늘</button>
+  <button class="tab" data-screen="news" onclick="switchTab('news')">
+    <span class="ic">📰</span>뉴스</button>
   <button class="tab" data-screen="settings" onclick="switchTab('settings')">
     <span class="ic">⚙</span>더보기</button>
 </nav>
+
+<section class="screen" id="screen-news">
+  <div class="topbar cal-top">
+    <div class="brand"><div class="name">뉴스</div></div>
+    <div class="cal-acts"><button class="cal-ic" onclick="loadNews(true)" aria-label="새로고침">↻</button></div>
+  </div>
+  <div class="nw-chips" id="nw-chips"></div>
+  <div class="nw-meta" id="nw-meta"></div>
+  <div id="nw-list"></div>
+</section>
 
 <!-- ============ 데이터 검증 콘솔 (v3.0.0) ============ -->
 <div class="modal-mask" id="verify-mask" onclick="closeVerify()"></div>
@@ -2106,6 +2137,72 @@ function renderProfCard() {
     </div>`;
 }
 
+
+/* ═══ 뉴스 (v7) — 같은 도메인의 news.json 만 읽는다(CORS 회피) ═══ */
+let NEWS = null, nwCat = '전체', nwLoading = false;
+
+async function loadNews(force) {
+  if (nwLoading) return;
+  if (NEWS && !force) { renderNews(); return; }
+  nwLoading = true;
+  const meta = document.getElementById('nw-meta');
+  if (meta) meta.textContent = '불러오는 중…';
+  try {
+    /* 캐시 때문에 옛 뉴스가 굳는 걸 막는다 */
+    const r = await fetch('news.json?v=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error(String(r.status));
+    NEWS = await r.json();
+  } catch (e) {
+    NEWS = null;
+    if (meta) meta.textContent = '';
+    const list = document.getElementById('nw-list');
+    if (list) list.innerHTML = '<div class="empty-msg"><span class="ic">○</span>지금은 뉴스를 불러오지 못했어요. 잠시 뒤 ↻ 를 눌러주세요.</div>';
+    nwLoading = false;
+    return;
+  }
+  nwLoading = false;
+  renderNews();
+}
+
+function agoText(iso) {
+  if (!iso) return '';
+  const m = Math.floor((Date.now() - new Date(iso)) / 60000);
+  if (m < 1) return '방금';
+  if (m < 60) return m + '분 전';
+  const hh = Math.floor(m / 60);
+  if (hh < 24) return hh + '시간 전';
+  return Math.floor(hh / 24) + '일 전';
+}
+
+function renderNews() {
+  const chips = document.getElementById('nw-chips');
+  const meta = document.getElementById('nw-meta');
+  const list = document.getElementById('nw-list');
+  if (!list) return;
+  if (!NEWS) { loadNews(); return; }
+
+  const cats = ['전체', ...NEWS.cats];
+  chips.innerHTML = cats.map(c =>
+    `<button class="nw-chip${c === nwCat ? ' on' : ''}" onclick="setNwCat('${c}')">${c}</button>`).join('');
+
+  const items = NEWS.items.filter(x => nwCat === '전체' || x.c === nwCat);
+  meta.textContent = `${items.length}건 · ${agoText(NEWS.at)} 업데이트`;
+
+  list.innerHTML = items.length ? items.map(x => `
+    <a class="nw-card" href="${x.u || '#'}" target="_blank" rel="noopener">
+      <div class="nw-tags">
+        <span class="nw-cat">${x.c}</span>
+        ${x.tone === 'up' ? '<span class="nw-t up">강세</span>' : x.tone === 'down' ? '<span class="nw-t down">약세</span>' : ''}
+      </div>
+      <div class="nw-ti">${x.t}</div>
+      ${x.d ? `<div class="nw-d">${x.d}</div>` : ''}
+      <div class="nw-ft"><span>${x.s}</span><span>${agoText(x.at)}</span></div>
+    </a>`).join('')
+    : '<div class="empty-msg"><span class="ic">○</span>이 분류엔 아직 기사가 없어요</div>';
+}
+
+function setNwCat(c) { nwCat = c; renderNews(); }
+
 function renderPeriod() {
   /* 탭 */
   const tabs = document.getElementById('per-tabs');
@@ -2506,6 +2603,7 @@ function switchTab(name) {
   if (name === 'home') renderHome();
   if (name === 'today') renderTodayScreen();
   if (name === 'cal') { renderMonth(); renderSheet(); }
+  if (name === 'news') loadNews();
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
