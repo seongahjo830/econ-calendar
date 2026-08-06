@@ -592,7 +592,248 @@
   .quiet-up-h { font-size:11px; color:var(--ink-3); font-weight:700; letter-spacing:0.06em;
     text-transform:uppercase; margin:4px 0 2px; padding:14px 2px 0;
     border-top:1px solid var(--line-soft); }
+
+  /* ══════════════════════════════════════════════════════════════
+     v3.0.0 — 온보딩 설문 · 튜토리얼 · 알림 · 데이터 검증 · 공유
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── 온보딩 오버레이 ── */
+  .onb { position:fixed; inset:0; z-index:900; background:var(--bg);
+    display:none; flex-direction:column;
+    padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom); }
+  .onb.show { display:flex; }
+  .onb-top { display:flex; align-items:center; gap:10px; padding:14px 18px 8px; }
+  .onb-back { border:0; background:transparent; color:var(--ink-3); font-size:20px;
+    font-weight:700; padding:2px 6px; line-height:1; visibility:hidden; }
+  .onb-back.on { visibility:visible; }
+  .onb-bar { flex:1; height:4px; border-radius:99px; background:var(--line); overflow:hidden; }
+  .onb-bar i { display:block; height:100%; width:0%; border-radius:99px;
+    background:linear-gradient(90deg, var(--accent), #6D8BFF);
+    transition:width .45s cubic-bezier(.22,1,.36,1); }
+  .onb-skip { border:0; background:transparent; color:var(--ink-4); font-size:12.5px;
+    font-weight:700; padding:4px 2px; }
+
+  .onb-body { flex:1; overflow-y:auto; padding:10px 22px 8px; }
+  .onb-step { display:none; animation:onbIn .42s cubic-bezier(.22,1,.36,1) both; }
+  .onb-step.on { display:block; }
+  @keyframes onbIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+  .onb-kicker { font-size:11px; font-weight:800; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+  .onb-q { font-size:25px; font-weight:850; letter-spacing:-0.035em; line-height:1.25;
+    color:var(--ink); }
+  .onb-sub { font-size:13.5px; color:var(--ink-3); font-weight:500; margin-top:9px;
+    line-height:1.6; }
+
+  /* 훅 화면 */
+  .onb-hook { padding:14px 0 0; }
+  .onb-hook .scene { background:var(--bg-card); border:1px solid var(--line);
+    border-radius:var(--r-lg); padding:18px 18px 16px; box-shadow:var(--shadow-md);
+    margin-top:22px; }
+  .onb-hook .scene .t { font-size:11px; font-weight:800; color:var(--s);
+    letter-spacing:0.06em; }
+  .onb-hook .scene .l { font-size:15px; font-weight:700; color:var(--ink); margin-top:8px;
+    line-height:1.55; letter-spacing:-0.015em; }
+  .onb-hook .scene .l.dim { color:var(--ink-3); font-weight:500; }
+  .onb-hook .scene .l b { color:var(--s); }
+
+  /* 캐릭터 카드 */
+  .onb-cards { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px; }
+  .onb-card { text-align:left; background:var(--bg-card); border:1.5px solid var(--line);
+    border-radius:var(--r-md); padding:14px 13px; transition:transform .16s, border-color .16s,
+    box-shadow .16s; }
+  .onb-card .e { font-size:26px; line-height:1; }
+  .onb-card .n { font-size:14px; font-weight:800; margin-top:9px; letter-spacing:-0.02em;
+    color:var(--ink); }
+  .onb-card .d { font-size:11.5px; color:var(--ink-3); margin-top:4px; line-height:1.45;
+    font-weight:500; }
+  .onb-card.sel { border-color:var(--accent); background:var(--accent-soft);
+    box-shadow:0 0 0 3px rgba(35,71,217,.10); }
+  .onb-card:active { transform:scale(.96); }
+  .onb-card.pop { animation:pop .34s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes pop { 0%{transform:scale(1)} 40%{transform:scale(1.07)} 100%{transform:scale(1)} }
+
+  /* 칩 */
+  .onb-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+  .onb-chip { border:1.5px solid var(--line); background:var(--bg-card); border-radius:99px;
+    padding:9px 14px; font-size:13.5px; font-weight:700; color:var(--ink-2);
+    letter-spacing:-0.015em; transition:transform .16s, border-color .16s, background .16s; }
+  .onb-chip.sel { border-color:var(--accent); background:var(--accent); color:#fff; }
+  .onb-chip:active { transform:scale(.94); }
+  .onb-chip.pop { animation:pop .34s cubic-bezier(.34,1.56,.64,1); }
+  .onb-chip .g { font-size:10px; font-weight:800; opacity:.65; margin-left:5px; }
+
+  .onb-grouplbl { font-size:11px; font-weight:800; color:var(--ink-4); letter-spacing:0.08em;
+    text-transform:uppercase; margin:22px 0 -6px; }
+
+  /* 계산 연출 */
+  .onb-calc { text-align:center; padding:50px 0; }
+  .onb-calc .ring { width:46px; height:46px; margin:0 auto; border-radius:50%;
+    border:3px solid var(--line); border-top-color:var(--accent);
+    animation:spin .8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .onb-calc .m { font-size:13.5px; color:var(--ink-3); font-weight:600; margin-top:16px; }
+
+  /* 결과 카드 */
+  .onb-result { background:linear-gradient(155deg, #0E1330, #1B2560);
+    border-radius:var(--r-lg); padding:22px 20px; color:#fff; margin-top:18px;
+    box-shadow:0 20px 40px -22px rgba(14,19,48,.55); }
+  .onb-result .rl { font-size:10.5px; font-weight:800; letter-spacing:0.12em;
+    text-transform:uppercase; color:#8FA6FF; }
+  .onb-result .rt { font-size:22px; font-weight:850; letter-spacing:-0.03em; margin-top:7px;
+    line-height:1.25; }
+  .onb-result .rd { font-size:13px; color:#B9C4EE; margin-top:9px; line-height:1.6;
+    font-weight:500; }
+  .onb-result .rstats { display:flex; gap:10px; margin-top:16px; }
+  .onb-result .rstat { flex:1; background:rgba(255,255,255,.09); border-radius:var(--r-sm);
+    padding:11px 12px; }
+  .onb-result .rstat .v { font-size:19px; font-weight:850; font-variant-numeric:tabular-nums;
+    letter-spacing:-0.02em; }
+  .onb-result .rstat .k { font-size:10.5px; color:#9FB0E8; font-weight:600; margin-top:2px; }
+
+  .onb-foot { padding:12px 22px calc(16px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line-soft); background:var(--bg); }
+  .onb-next { width:100%; border:0; border-radius:var(--r-md); background:var(--ink);
+    color:#fff; font-size:15.5px; font-weight:800; padding:15px; letter-spacing:-0.02em;
+    transition:transform .16s, opacity .16s; }
+  .onb-next:active { transform:scale(.98); }
+  .onb-next[disabled] { opacity:.28; }
+  .onb-next.accent { background:var(--accent); }
+  .onb-ghost { width:100%; border:0; background:transparent; color:var(--ink-3);
+    font-size:13px; font-weight:700; padding:11px; margin-top:2px; }
+  .onb-hint { text-align:center; font-size:11.5px; color:var(--ink-4); font-weight:600;
+    margin-bottom:9px; }
+
+  /* ── 코치마크 튜토리얼 ── */
+  .coach { position:fixed; inset:0; z-index:880; display:none; }
+  .coach.show { display:block; }
+  .coach-dim { position:absolute; inset:0; background:rgba(10,10,10,.62); }
+  .coach-hole { position:absolute; border-radius:16px; box-shadow:0 0 0 9999px rgba(10,10,10,.62);
+    border:2px solid rgba(255,255,255,.9); transition:all .38s cubic-bezier(.22,1,.36,1);
+    pointer-events:none; }
+  .coach-box { position:absolute; left:16px; right:16px; background:var(--bg-card);
+    border-radius:var(--r-lg); padding:17px 18px; box-shadow:var(--shadow-lg);
+    animation:onbIn .34s cubic-bezier(.22,1,.36,1) both; }
+  .coach-box .ct { font-size:16px; font-weight:850; letter-spacing:-0.025em; color:var(--ink); }
+  .coach-box .cd { font-size:13px; color:var(--ink-2); margin-top:6px; line-height:1.6;
+    font-weight:500; }
+  .coach-box .crow { display:flex; align-items:center; justify-content:space-between;
+    margin-top:15px; }
+  .coach-box .cdots { display:flex; gap:5px; }
+  .coach-box .cdots i { width:6px; height:6px; border-radius:50%; background:var(--line);
+    display:block; }
+  .coach-box .cdots i.on { background:var(--accent); width:16px; border-radius:99px; }
+  .coach-box .cbtn { border:0; border-radius:99px; background:var(--ink); color:#fff;
+    font-size:13.5px; font-weight:800; padding:9px 18px; }
+  .coach-box .cskip { border:0; background:transparent; color:var(--ink-4); font-size:12.5px;
+    font-weight:700; padding:9px 4px; }
+
+  /* ── 알림 설정 (설정 화면) ── */
+  .notif-topics { padding:4px 16px 14px; }
+  .notif-topics .nt-lead { font-size:12.5px; color:var(--ink-3); font-weight:500;
+    line-height:1.6; margin-bottom:11px; }
+  .nt-chips { display:flex; flex-wrap:wrap; gap:7px; }
+  .nt-chip { border:1.5px solid var(--line); background:var(--bg-card); border-radius:99px;
+    padding:7px 12px; font-size:12.5px; font-weight:700; color:var(--ink-3); }
+  .nt-chip.sel { border-color:var(--accent); background:var(--accent); color:#fff; }
+  .nt-chip:active { transform:scale(.94); }
+  .nt-actions { display:flex; gap:8px; margin-top:13px; }
+  .nt-btn { flex:1; border:0; border-radius:var(--r-sm); padding:12px 10px; font-size:13px;
+    font-weight:800; letter-spacing:-0.015em; background:var(--accent); color:#fff; }
+  .nt-btn.sec { background:var(--bg-soft); color:var(--ink-2); }
+  .nt-btn:active { transform:scale(.98); }
+  .nt-note { font-size:11.5px; color:var(--ink-4); font-weight:500; margin-top:10px;
+    line-height:1.55; }
+
+  /* ── 데이터 검증 콘솔 ── */
+  .vf-summary { display:flex; gap:9px; margin:2px 0 14px; }
+  .vf-sum { flex:1; border-radius:var(--r-md); padding:13px 12px; text-align:center;
+    border:1px solid var(--line); background:var(--bg-card); }
+  .vf-sum .v { font-size:22px; font-weight:850; font-variant-numeric:tabular-nums;
+    letter-spacing:-0.03em; line-height:1.1; }
+  .vf-sum .k { font-size:10.5px; font-weight:700; color:var(--ink-3); margin-top:4px; }
+  .vf-sum.ok  { background:var(--bull-bg); border-color:#BBF7D0; } .vf-sum.ok .v  { color:var(--bull); }
+  .vf-sum.warn{ background:var(--sig-y-bg); border-color:#FDE68A; } .vf-sum.warn .v{ color:var(--sig-y); }
+  .vf-sum.bad { background:var(--bear-bg); border-color:#FECACA; } .vf-sum.bad .v { color:var(--bear); }
+
+  .vf-hash { font-size:11px; color:var(--ink-4); font-weight:600; text-align:center;
+    margin:-6px 0 14px; font-variant-numeric:tabular-nums; }
+  .vf-group { margin-bottom:16px; }
+  .vf-group > h4 { font-size:11px; font-weight:800; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--ink-4); margin:0 0 8px; }
+  .vf-item { display:flex; gap:10px; align-items:flex-start; padding:10px 12px;
+    border:1px solid var(--line-soft); border-radius:var(--r-sm); background:var(--bg-card);
+    margin-bottom:6px; width:100%; text-align:left; }
+  .vf-item .ic { font-size:13px; line-height:1.45; flex:0 0 auto; }
+  .vf-item .tx { flex:1; }
+  .vf-item .tx .t { font-size:13px; font-weight:700; color:var(--ink); letter-spacing:-0.015em; }
+  .vf-item .tx .d { font-size:11.5px; color:var(--ink-3); font-weight:500; margin-top:3px;
+    line-height:1.5; }
+  .vf-item.bad  { border-color:#FECACA; background:var(--bear-bg); }
+  .vf-item.warn { border-color:#FDE68A; background:var(--sig-y-bg); }
+  .vf-item .go { font-size:11px; font-weight:800; color:var(--accent); flex:0 0 auto;
+    align-self:center; }
+  .vf-src { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+  .vf-src a { font-size:11.5px; font-weight:700; color:var(--accent); text-decoration:none;
+    background:var(--accent-soft); border-radius:99px; padding:6px 11px; }
+  .vf-lead { font-size:12.5px; color:var(--ink-3); font-weight:500; line-height:1.65;
+    margin-bottom:14px; }
+
+  /* 홈 신뢰 배지 */
+  .trust-chip { display:flex; align-items:center; gap:7px; margin:0 20px 12px;
+    padding:9px 13px; border-radius:99px; background:var(--bull-bg); border:1px solid #BBF7D0;
+    font-size:11.5px; font-weight:700; color:#15803D; width:calc(100% - 40px); }
+  .trust-chip.warn { background:var(--sig-y-bg); border-color:#FDE68A; color:#A16207; }
+  .trust-chip .arrow { margin-left:auto; opacity:.6; font-weight:800; }
+
+  /* ── 공유 ── */
+  .share-row { display:flex; gap:8px; padding:0 16px 6px; }
+  .share-btn { flex:1; border:1.5px solid var(--line); background:var(--bg-card);
+    border-radius:var(--r-sm); padding:12px 8px; font-size:13px; font-weight:800;
+    color:var(--ink-2); letter-spacing:-0.015em; }
+  .share-btn:active { transform:scale(.98); }
+
+  /* 내 관심사 요약 */
+  .mytopics { display:flex; flex-wrap:wrap; gap:6px; padding:2px 16px 12px; }
+  .mytopics .mt { font-size:11.5px; font-weight:700; color:var(--accent);
+    background:var(--accent-soft); border-radius:99px; padding:5px 10px; }
+
+/* ── 로그인 단계 (v4) ── */
+.signin-wrap{margin-top:18px}
+.signin{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  border-radius:14px;padding:15px 16px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:10px}
+.signin.g{background:#fff;color:#1f2430;border:1.5px solid #d7dce6}
+.signin.g:active{background:#f2f4f8}
+.signin.ghost{background:transparent;color:var(--sub);border:1.5px solid var(--line)}
+.signin .gi{display:flex}
+.signin-note{margin-top:12px;font-size:12px;line-height:1.6;color:var(--sub);text-align:center}
+
+/* ── 관심사 개별 선택 (v4) ── */
+.int-tools{display:flex;align-items:center;gap:7px;margin:14px 0 6px;flex-wrap:wrap}
+.int-tool{border:1.5px solid var(--line);background:transparent;color:var(--sub);
+  border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;cursor:pointer}
+.int-tool:active{background:var(--line)}
+.int-cnt{margin-left:auto;font-size:12px;font-weight:700;color:var(--accent)}
+.int-g{margin-top:14px}
+.int-gh{display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;font-weight:800;color:var(--ink);margin-bottom:7px}
+.int-gtoggle{border:none;background:transparent;color:var(--accent);font-size:12px;font-weight:800;cursor:pointer;padding:2px 4px}
+.int-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.int-item{display:flex;align-items:center;gap:6px;text-align:left;
+  border:1.5px solid var(--line);background:transparent;border-radius:12px;
+  padding:11px 12px;cursor:pointer;position:relative}
+.int-item .int-n{flex:1;font-size:13.5px;font-weight:700;color:var(--ink)}
+.int-item .int-chk{opacity:0;font-size:12px;font-weight:900;color:var(--accent)}
+.int-item.on{border-color:var(--accent);background:rgba(59,110,220,.07)}
+.int-item.on .int-chk{opacity:1}
+.int-gS,.int-gA,.int-gB,.int-gC{font-size:10px;font-weight:900;border-radius:6px;padding:2px 5px}
+.int-gS{background:#ffe3e3;color:#c92a2a}
+.int-gA{background:#ffe9f0;color:#c2255c}
+.int-gB{background:#fff3e0;color:#e8590c}
+.int-gC{background:#fff9db;color:#b08900}
+@media (max-width:340px){ .int-list{grid-template-columns:1fr} }
 </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -613,6 +854,11 @@
   <div class="sample-chip" id="sample-chip">
     <span class="dot"></span>시세·수급 샘플 데이터 · 발표값 자동수집은 Phase 3.1.1
   </div>
+
+  <button class="trust-chip" id="trust-chip" onclick="openVerify()">
+    <span id="trust-txt">일정 데이터 자동 점검 중…</span>
+    <span class="arrow">›</span>
+  </button>
 
   <!-- 핵심 5숫자 카드 -->
   <div class="quote-card" style="margin:0 20px 14px;">
@@ -752,22 +998,46 @@
         <span class="legend-desc">보조 지표 · 옵션만기</span></div></div>
     </div>
 
-    <h3>알림</h3>
+    <h3>알림 받을 주제</h3>
     <div class="s-group">
-      <div class="s-row coming"><div><div class="lbl">S급 24시간 전 알림</div></div>
-        <div class="badge-soon">곧</div></div>
-      <div class="s-row coming"><div><div class="lbl">매일 아침 브리핑</div></div>
-        <div class="badge-soon">곧</div></div>
+      <div class="notif-topics">
+        <div class="nt-lead">고른 주제만 <b>휴대폰 캘린더에 등록</b>돼서 하루 전·1시간 전에 알림이 울려요.
+          앱을 안 켜도 울립니다.</div>
+        <div class="nt-chips" id="nt-chips"></div>
+        <div class="nt-actions">
+          <button class="nt-btn" onclick="downloadIcs()">📅 캘린더에 등록</button>
+          <button class="nt-btn sec" onclick="openOnboarding(true)">🔁 설문 다시</button>
+        </div>
+        <div class="nt-note" id="nt-note">— 개 일정이 등록됩니다.</div>
+      </div>
+    </div>
+
+    <h3>내 관심사</h3>
+    <div class="s-group">
+      <div class="mytopics" id="my-topics"></div>
     </div>
 
     <h3>데이터</h3>
     <div class="s-group">
+      <button class="s-row" style="width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--line-soft);"
+              onclick="openVerify()">
+        <div><div class="lbl">🔍 데이터 검증 콘솔</div>
+          <div class="sub" id="vf-teaser">일정이 틀리지 않았는지 자동 점검</div></div>
+        <div class="chev">›</div></button>
       <div class="s-row"><div><div class="lbl">버전</div></div>
-        <div class="sub" id="ver">v2.4.0 — 일정 상세 모달 + 조용한 날 + 탭바 고정</div></div>
+        <div class="sub" id="ver">v3.0.0 — 온보딩 설문 · 알림 주제 · 데이터 검증</div></div>
       <div class="s-row"><div><div class="lbl">등록된 이벤트</div></div>
         <div class="sub" id="ev-count">— 개</div></div>
       <div class="s-row"><div><div class="lbl">데이터 기간</div></div>
         <div class="sub">2026년 1~12월 · 과거 발표값 포함</div></div>
+    </div>
+
+    <h3>공유</h3>
+    <div class="s-group">
+      <div class="share-row">
+        <button class="share-btn" onclick="shareApp()">🔗 링크 공유</button>
+        <button class="share-btn" onclick="shareNextEvent()">📢 다음 일정 알리기</button>
+      </div>
     </div>
 
     <h3>정보</h3>
@@ -844,6 +1114,150 @@
   <button class="tab" data-screen="settings" onclick="switchTab('settings')">
     <span class="ic">⚙</span>더보기</button>
 </nav>
+
+<!-- ============ 데이터 검증 콘솔 (v3.0.0) ============ -->
+<div class="modal-mask" id="verify-mask" onclick="closeVerify()"></div>
+<div class="modal-sheet" id="verify-sheet" role="dialog" aria-modal="true">
+  <div class="modal-grip"></div>
+  <div class="modal-head">
+    <div class="ttl">🔍 데이터 검증 콘솔</div>
+    <button class="close" onclick="closeVerify()" aria-label="닫기">✕</button>
+  </div>
+  <div class="modal-body" id="verify-body"></div>
+</div>
+
+<!-- ============ 온보딩 설문 (v3.0.0) ============ -->
+<div class="onb" id="onb">
+  <div class="onb-top">
+    <button class="onb-back" id="onb-back" onclick="onbBack()" aria-label="이전">‹</button>
+    <div class="onb-bar"><i id="onb-bar-i"></i></div>
+    <button class="onb-skip" onclick="onbSkip()">건너뛰기</button>
+  </div>
+
+  <div class="onb-body">
+
+    <!-- 0. 훅 -->
+    <div class="onb-step on" data-step="0">
+      <div class="onb-hook">
+        <div class="onb-kicker">30초 세팅</div>
+        <div class="onb-q">자는 동안<br>시장은 이미 움직입니다</div>
+        <div class="onb-sub">언제 뭐가 터지는지만 알아도 절반은 먹고 들어갑니다.
+          당신에게 맞는 일정만 골라드릴게요.</div>
+        <div class="scene">
+          <div class="t">밤 10시 30분 · 서울</div>
+          <div class="l">미국 물가(CPI)가 발표됩니다.</div>
+          <div class="l dim">당신은 자고 있고,</div>
+          <div class="l">아침에 코스피는 <b>이미 −2%</b>.</div>
+        </div>
+        <div class="scene" style="margin-top:10px;">
+          <div class="t" style="color:var(--bull)">같은 밤 · 알림을 켜둔 사람</div>
+          <div class="l">전날 저녁에 알림을 받고 비중을 줄여둠.</div>
+          <div class="l dim">아침에 커피 마시며 확인만.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 0.5 로그인 -->
+    <div class="onb-step" data-step="5">
+      <div class="onb-q">시작하기 전에</div>
+      <div class="onb-sub">로그인하면 <b>기기를 바꿔도 설정이 따라옵니다.</b> 안 해도 전부 쓸 수 있어요.</div>
+      <div class="signin-wrap">
+        <button class="signin g" id="btn-google" onclick="signInGoogle()">
+          <span class="gi" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="20" height="20"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.6 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.2 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-2.8-.4-4.1H24v7.4h12.6c-.3 2.1-1.6 5.2-4.7 7.3l7.2 5.6c4.3-4 6.9-9.9 6.9-16.2z"/><path fill="#FBBC05" d="M10.4 28.7c-.5-1.4-.8-2.9-.8-4.4s.3-3 .7-4.4l-7.8-6.1C1 16.8 0 20.3 0 24s1 7.2 2.6 10.2l7.8-5.5z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.2-5.6c-2 1.3-4.6 2.3-8.7 2.3-6.3 0-11.7-3.7-13.6-9l-7.8 5.5C6.5 42.6 14.6 48 24 48z"/></svg>
+          </span>
+          <span id="btn-google-t">Google 계정으로 계속</span>
+        </button>
+        <button class="signin ghost" onclick="signInGuest()">로그인 없이 계속</button>
+        <p class="signin-note" id="signin-note">계정은 설정을 옮기는 데만 씁니다. 투자 정보나 결제 수단은 요구하지 않습니다.</p>
+      </div>
+    </div>
+
+    <!-- 1. 성향 -->
+    <div class="onb-step" data-step="1">
+      <div class="onb-kicker">1 / 3</div>
+      <div class="onb-q">당신은 어느 쪽?</div>
+      <div class="onb-sub">하나만 골라주세요. 알림 강도가 달라집니다.</div>
+      <div class="onb-cards" id="onb-style"></div>
+    </div>
+
+    <!-- 2. 자산 -->
+    <div class="onb-step" data-step="2">
+      <div class="onb-kicker">2 / 3</div>
+      <div class="onb-q">뭘 굴리세요?</div>
+      <div class="onb-sub">여러 개 골라도 됩니다. 이걸로 필요 없는 일정을 걸러냅니다.</div>
+      <div class="onb-chips" id="onb-assets"></div>
+    </div>
+
+    <!-- 2.5 계산 연출 -->
+    <div class="onb-step" data-step="25">
+      <div class="onb-calc">
+        <div class="ring"></div>
+        <div class="m" id="onb-calc-msg">당신에게 맞는 일정 고르는 중…</div>
+      </div>
+    </div>
+
+    <!-- 3.5 관심사 개별 선택 -->
+    <div class="onb-step" data-step="35">
+      <div class="onb-kicker">3 / 4</div>
+      <div class="onb-q">어떤 지표를 보실 건가요?</div>
+      <div class="onb-sub">고른 것만 달력에 남습니다. <b>추천으로 미리 켜뒀어요</b> — 눌러서 끄고 켜면 됩니다.</div>
+      <div class="int-tools">
+        <button class="int-tool" onclick="intAll(true)">전체 켜기</button>
+        <button class="int-tool" onclick="intAll(false)">전체 끄기</button>
+        <button class="int-tool" onclick="intCore()">핵심만</button>
+        <span class="int-cnt" id="int-cnt"></span>
+      </div>
+      <div id="int-groups"></div>
+    </div>
+
+    <!-- 3. 알림 주제 -->
+    <div class="onb-step" data-step="3">
+      <div class="onb-kicker">3 / 3</div>
+      <div class="onb-q">매일 알림, 이걸로 갈까요?</div>
+      <div class="onb-sub">당신 선택으로 <b>이미 골라놨어요.</b> 필요 없는 건 톡 눌러서 끄면 됩니다.</div>
+      <div class="onb-grouplbl">알림 주제</div>
+      <div class="onb-chips" id="onb-topics"></div>
+      <div class="onb-grouplbl">언제 알려드릴까요</div>
+      <div class="onb-chips" id="onb-timing"></div>
+    </div>
+
+    <!-- 4. 결과 -->
+    <div class="onb-step" data-step="4">
+      <div class="onb-kicker">완료</div>
+      <div class="onb-q">세팅 끝 🎉</div>
+      <div class="onb-result" id="onb-result"></div>
+      <div class="onb-sub" style="margin-top:16px;">
+        캘린더에 등록하면 앱을 안 켜도 <b>휴대폰이 알아서 알려줍니다.</b>
+        나중에 <b>더보기 → 알림 받을 주제</b>에서 언제든 바꿀 수 있어요.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="onb-foot">
+    <div class="onb-hint" id="onb-hint"></div>
+    <button class="onb-next" id="onb-next" onclick="onbNext()">30초만 주세요 →</button>
+    <button class="onb-ghost" id="onb-ghost" style="display:none;" onclick="onbFinish()">나중에 할게요</button>
+  </div>
+</div>
+
+<!-- ============ 코치마크 튜토리얼 (v3.0.0) ============ -->
+<div class="coach" id="coach">
+  <div class="coach-dim" id="coach-dim"></div>
+  <div class="coach-hole" id="coach-hole"></div>
+  <div class="coach-box" id="coach-box">
+    <div class="ct" id="coach-t"></div>
+    <div class="cd" id="coach-d"></div>
+    <div class="crow">
+      <div class="cdots" id="coach-dots"></div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <button class="cskip" onclick="coachEnd()">건너뛰기</button>
+        <button class="cbtn" id="coach-btn" onclick="coachNext()">다음</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ====================================================================
@@ -1683,8 +2097,10 @@ function renderHome() {
     const cnt = days === 0 ? '오늘' : days === 1 ? '내일' : `D-${days}`;
     h = `이번 주 S급 · 다음 ${cnt}`;
   }
-  document.getElementById('home-list-h').textContent = h;
+  document.getElementById('home-list-h').textContent =
+    (PROFILE && PROFILE.done && PROFILE.topics.length) ? h.replace('S급','내 관심') : h;
   renderHomeList();
+  renderTrustChip();
 }
 
 function findNextS() {
@@ -1698,16 +2114,23 @@ function findNextS() {
 }
 
 function renderHomeList() {
-  // 오늘 ~ +7일 S급
+  // 오늘 ~ +7일 · S급 + 내가 고른 주제
+  const mine = (PROFILE && PROFILE.done && PROFILE.topics.length)
+    ? new Set(PROFILE.topics) : null;
   const out = [];
   for (let off = 0; off < 8; off++) {
     const d = new Date(today); d.setDate(today.getDate() + off);
     const k = ymd(d);
-    (byDate[k] || []).filter(e => e.g === 'S').forEach(e => out.push({ ...e, k, off }));
+    (byDate[k] || [])
+      .filter(e => e.g === 'S' || (mine && mine.has(e.t)))
+      .forEach(e => out.push({ ...e, k, off, mine: !!(mine && mine.has(e.t)) }));
   }
   const root = document.getElementById('home-list-body');
   if (!out.length) {
-    root.innerHTML = `<div class="empty">이번주 S급 일정 없음</div>`;
+    const nx = nextMatching(mine ? [...mine] : TOPICS.map(t => t.id));
+    root.innerHTML = nx
+      ? `<div class="empty">이번 주는 조용합니다 · 다음은 ${nx.days===0?'오늘':nx.days===1?'내일':'D-'+nx.days} ${nx.title}</div>`
+      : `<div class="empty">이번주 일정 없음</div>`;
     return;
   }
   root.innerHTML = out.slice(0, 6).map(ev => {
@@ -1717,7 +2140,7 @@ function renderHomeList() {
     return `<div class="item" onclick="openDayDetail('${ev.k}')">
       <div class="dt">${dt}</div>
       <div class="ti">${ev.title}</div>
-      <div class="gd S">S</div>
+      <div class="gd ${ev.g}">${ev.g}</div>
     </div>`;
   }).join('');
 }
@@ -1790,17 +2213,902 @@ document.getElementById('install-btn').addEventListener('click', async () => {
   document.getElementById('install-banner').classList.remove('show');
 });
 
+// ════════════════════════════════════════════════════════════════════
+// v3.0.0 — 프로필 · 온보딩 설문 · 튜토리얼 · 알림 · 데이터 검증 · 공유
+// ════════════════════════════════════════════════════════════════════
+
+// ── 발표 시각(KST). off:1 = 다음날 새벽 ──
+const TIME_KST = {
+  FOMC:{h:3,m:0,off:1,label:'익일 새벽 3:00'},  CPI:{h:21,m:30,off:0,label:'21:30'},
+  NFP:{h:21,m:30,off:0,label:'21:30'},          PCE:{h:21,m:30,off:0,label:'21:30'},
+  KR_TRADE:{h:9,m:0,off:0,label:'09:00'},       KR_BOK:{h:10,m:0,off:0,label:'10:00'},
+  BOJ:{h:12,m:0,off:0,label:'12:00 전후'},      EU_CPI:{h:18,m:0,off:0,label:'18:00'},
+  WITCH:{h:15,m:20,off:0,label:'15:20 동시호가'}, KR_OPT:{h:15,m:20,off:0,label:'15:20'},
+  US_OPT:{h:5,m:0,off:1,label:'익일 새벽 5:00'}, JACKSON:{h:23,m:0,off:0,label:'23:00 전후'},
+};
+
+// ── 주제 카탈로그 ──
+const TOPICS = [
+  { id:'FOMC',     ko:'FOMC 금리',   flag:'🇺🇸', g:'S' },
+  { id:'CPI',      ko:'미국 물가',   flag:'🇺🇸', g:'S' },
+  { id:'NFP',      ko:'미국 고용',   flag:'🇺🇸', g:'S' },
+  { id:'PCE',      ko:'PCE 물가',    flag:'🇺🇸', g:'A' },
+  { id:'KR_BOK',   ko:'한국 금통위', flag:'🇰🇷', g:'S' },
+  { id:'KR_TRADE', ko:'한국 수출입', flag:'🇰🇷', g:'S' },
+  { id:'WITCH',    ko:'네마녀의날',  flag:'🇰🇷', g:'S' },
+  { id:'KR_OPT',   ko:'한국 옵션만기',flag:'🇰🇷', g:'C' },
+  { id:'BOJ',      ko:'일본 BOJ',    flag:'🇯🇵', g:'B' },
+  { id:'EU_CPI',   ko:'유로 물가',   flag:'🇪🇺', g:'B' },
+  { id:'US_OPT',   ko:'SPX 만기',    flag:'🇺🇸', g:'B' },
+  { id:'JACKSON',  ko:'잭슨홀',      flag:'🌐', g:'A' },
+];
+
+const STYLES = [
+  { id:'fast',  e:'⚡', n:'단타러',  d:'발표 그 순간이 전쟁' },
+  { id:'hold',  e:'🌱', n:'존버러',  d:'1년에 몇 번만 보면 됨' },
+  { id:'coin',  e:'🪙', n:'코인러',  d:'새벽에 안 잠' },
+  { id:'study', e:'📚', n:'공부러',  d:'일단 뭔 소린지부터' },
+];
+
+const ASSETS = [
+  { id:'kr',   n:'🇰🇷 국내주식' }, { id:'us',   n:'🇺🇸 미국주식' },
+  { id:'coin', n:'🪙 코인' },      { id:'fx',   n:'💱 달러·환율' },
+  { id:'rate', n:'🏦 금리·대출' }, { id:'gold', n:'🥇 금·원자재' },
+];
+
+const TIMINGS = [
+  { id:'d1', n:'⏰ 하루 전' }, { id:'h1', n:'⏱️ 1시간 전' }, { id:'m10', n:'⚡ 10분 전' },
+];
+
+// 자산·성향 → 추천 주제
+const REC_BY_ASSET = {
+  kr:   ['KR_BOK','KR_TRADE','WITCH','CPI','FOMC'],
+  us:   ['FOMC','CPI','NFP','PCE','US_OPT'],
+  coin: ['FOMC','CPI','NFP','BOJ'],
+  fx:   ['FOMC','KR_BOK','BOJ','CPI'],
+  rate: ['FOMC','KR_BOK','CPI','PCE'],
+  gold: ['FOMC','CPI','PCE','EU_CPI'],
+};
+const STYLE_TWEAK = {
+  fast:  { add:['WITCH','KR_OPT','US_OPT'] },
+  hold:  { only:['FOMC','CPI','KR_BOK','KR_TRADE'] },
+  coin:  { add:['BOJ'] },
+  study: { only:['FOMC','CPI','NFP','KR_BOK'] },
+};
+
+// ── 프로필 저장 ──
+const PKEY = 'ec_profile_v1';
+let PROFILE = (() => {
+  try { return JSON.parse(localStorage.getItem(PKEY)) || null; } catch(_) { return null; }
+})();
+function saveProfile() { try { localStorage.setItem(PKEY, JSON.stringify(PROFILE)); } catch(_){} }
+
+/* ═══ 로그인 (선택) ═══
+   설정을 기기 간에 옮기는 용도로만 쓴다. 서버가 없으므로 신원 검증은 하지 않고,
+   구글이 준 이름·사진만 화면에 보여주고 설정은 계속 이 기기에 저장한다.
+   GOOGLE_CLIENT_ID가 비어 있으면 로그인 버튼은 안내로 바뀌고 게스트 흐름만 남는다. */
+const GOOGLE_CLIENT_ID = '';   /* Google Cloud 콘솔에서 만든 웹 클라이언트 ID를 여기에 */
+
+function acct() { try { return JSON.parse(localStorage.ec_acct || 'null'); } catch (e) { return null; } }
+function setAcct(a) { if (a) localStorage.ec_acct = JSON.stringify(a); else localStorage.removeItem('ec_acct'); paintAcct(); }
+
+function paintAcct() {
+  const a = acct();
+  document.querySelectorAll('[data-acct-name]').forEach(el => {
+    el.textContent = a ? a.name : '게스트';
+  });
+}
+
+function signInGuest() { setAcct(null); onbNext(); }
+
+function signInGoogle() {
+  const note = document.getElementById('signin-note');
+  if (!GOOGLE_CLIENT_ID) {
+    note.innerHTML = '지금은 <b>구글 로그인 준비 중</b>이라 게스트로 시작합니다. 설정은 이 기기에 그대로 저장돼요.';
+    setTimeout(signInGuest, 900);
+    return;
+  }
+  if (!window.google || !google.accounts || !google.accounts.id) {
+    note.textContent = '네트워크가 불안정해 로그인을 열지 못했어요. 로그인 없이 계속해도 됩니다.';
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: (res) => {
+      try {
+        /* id_token의 표시용 정보만 읽는다. 서버가 없어 검증은 못 하므로 권한 판단엔 절대 쓰지 않는다. */
+        const p = JSON.parse(decodeURIComponent(escape(atob(res.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')))));
+        setAcct({ name: p.name || p.email || '사용자', email: p.email || '', pic: p.picture || '' });
+      } catch (e) { setAcct(null); }
+      onbNext();
+    },
+  });
+  google.accounts.id.prompt((notif) => {
+    if (notif.isNotDisplayed && notif.isNotDisplayed()) {
+      note.textContent = '로그인 창이 열리지 않았어요. 로그인 없이 계속해도 전부 쓸 수 있습니다.';
+    }
+  });
+}
+
+/* ═══ 관심사 개별 선택 ═══
+   TOPICS를 국기(=시장) 기준으로 묶어 하나씩 토글한다. 온보딩 추천값이 초기 상태. */
+const CORE_TOPICS = ['FOMC', 'CPI', 'NFP', 'KR_BOK', 'KR_TRADE', 'WITCH'];
+
+function intGroups() {
+  const byFlag = new Map();
+  TOPICS.forEach(t => {
+    if (!byFlag.has(t.flag)) byFlag.set(t.flag, []);
+    byFlag.get(t.flag).push(t);
+  });
+  const NAME = { '🇺🇸': '미국', '🇰🇷': '한국', '🇯🇵': '일본', '🇪🇺': '유로존', '🌐': '글로벌' };
+  return [...byFlag.entries()].map(([flag, list]) => ({ flag, name: NAME[flag] || '기타', list }));
+}
+
+function buildInterests() {
+  const box = document.getElementById('int-groups');
+  if (!box) return;
+  box.innerHTML = intGroups().map(g => `
+    <div class="int-g">
+      <div class="int-gh"><span>${g.flag} ${g.name}</span>
+        <button class="int-gtoggle" onclick="intGroupAll('${g.flag}')">모두</button></div>
+      <div class="int-list">${g.list.map(t => `
+        <button class="int-item${onbDraft.topics.includes(t.id) ? ' on' : ''}"
+                data-topic="${t.id}" onclick="intToggle('${t.id}')">
+          <span class="int-n">${t.ko}</span>
+          <span class="int-g${t.g}">${t.g}급</span>
+          <span class="int-chk" aria-hidden="true">✓</span>
+        </button>`).join('')}</div>
+    </div>`).join('');
+  intCount();
+}
+
+function intToggle(id) {
+  const i = onbDraft.topics.indexOf(id);
+  if (i === -1) onbDraft.topics.push(id); else onbDraft.topics.splice(i, 1);
+  const el = document.querySelector('[data-topic="' + id + '"]');
+  if (el) el.classList.toggle('on', onbDraft.topics.includes(id));
+  intCount();
+}
+function intAll(on) { onbDraft.topics = on ? TOPICS.map(t => t.id) : []; buildInterests(); }
+function intCore() { onbDraft.topics = CORE_TOPICS.slice(); buildInterests(); }
+function intGroupAll(flag) {
+  const ids = TOPICS.filter(t => t.flag === flag).map(t => t.id);
+  const allOn = ids.every(i => onbDraft.topics.includes(i));
+  ids.forEach(i => {
+    const at = onbDraft.topics.indexOf(i);
+    if (allOn && at !== -1) onbDraft.topics.splice(at, 1);
+    if (!allOn && at === -1) onbDraft.topics.push(i);
+  });
+  buildInterests();
+}
+function intCount() {
+  const el = document.getElementById('int-cnt');
+  if (!el) return;
+  const c = onbDraft.topics.length;
+  /* countMatchingEvents는 {future,total} 을 준다 — 앞으로 남은 건수가 더 와닿는다 */
+  const m = countMatchingEvents(onbDraft.topics);
+  el.textContent = c ? c + '개 선택 · 앞으로 ' + m.future + '건' : '하나도 안 고르면 전부 보여드려요';
+}
+
+function defaultProfile() {
+  return { style:null, assets:[], topics:[], timing:['d1','h1'], done:false, coached:false };
+}
+
+function recommendTopics(style, assets) {
+  const set = new Set();
+  (assets.length ? assets : ['kr','us']).forEach(a =>
+    (REC_BY_ASSET[a] || []).forEach(t => set.add(t)));
+  const tw = STYLE_TWEAK[style];
+  if (tw) {
+    if (tw.only) {
+      // 좁게 보는 성향(존버·공부) — 고른 자산과 겹치는 것만. 너무 적으면 핵심 목록 그대로.
+      const narrow = tw.only.filter(t => set.has(t));
+      return narrow.length >= 3 ? narrow : tw.only;
+    }
+    (tw.add || []).forEach(t => set.add(t));
+  }
+  return TOPICS.map(t => t.id).filter(id => set.has(id));
+}
+
+// ════════════════════════════════════════════════════════════════════
+// 온보딩 설문
+// ════════════════════════════════════════════════════════════════════
+const ONB_ORDER = [0, 5, 1, 2, 25, 35, 3, 4];
+let onbIdx = 0, onbDraft = null, onbReopen = false;
+
+function openOnboarding(reopen) {
+  onbReopen = !!reopen;
+  onbDraft = PROFILE ? JSON.parse(JSON.stringify(PROFILE)) : defaultProfile();
+  onbIdx = reopen ? 1 : 0;
+  buildOnbStyle(); buildOnbAssets(); buildOnbTopics(); buildOnbTiming();
+  document.getElementById('onb').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  onbRender();
+}
+
+function buildOnbStyle() {
+  document.getElementById('onb-style').innerHTML = STYLES.map(s => `
+    <button class="onb-card ${onbDraft.style===s.id?'sel':''}" data-id="${s.id}"
+            onclick="pickStyle('${s.id}', this)">
+      <div class="e">${s.e}</div><div class="n">${s.n}</div><div class="d">${s.d}</div>
+    </button>`).join('');
+}
+function buildOnbAssets() {
+  document.getElementById('onb-assets').innerHTML = ASSETS.map(a => `
+    <button class="onb-chip ${onbDraft.assets.includes(a.id)?'sel':''}"
+            onclick="toggleAsset('${a.id}', this)">${a.n}</button>`).join('');
+}
+function buildOnbTopics() {
+  document.getElementById('onb-topics').innerHTML = TOPICS.map(t => `
+    <button class="onb-chip ${onbDraft.topics.includes(t.id)?'sel':''}"
+            onclick="toggleTopic('${t.id}', this)">${t.flag} ${t.ko}<span class="g">${t.g}</span></button>`).join('');
+}
+function buildOnbTiming() {
+  document.getElementById('onb-timing').innerHTML = TIMINGS.map(t => `
+    <button class="onb-chip ${onbDraft.timing.includes(t.id)?'sel':''}"
+            onclick="toggleTiming('${t.id}', this)">${t.n}</button>`).join('');
+}
+
+function pop(el) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
+
+function pickStyle(id, el) {
+  onbDraft.style = id;
+  document.querySelectorAll('#onb-style .onb-card').forEach(c =>
+    c.classList.toggle('sel', c.dataset.id === id));
+  pop(el); onbFootState();
+}
+function toggleAsset(id, el) {
+  const i = onbDraft.assets.indexOf(id);
+  if (i >= 0) onbDraft.assets.splice(i,1); else { onbDraft.assets.push(id); pop(el); }
+  el.classList.toggle('sel'); onbFootState();
+}
+function toggleTopic(id, el) {
+  const i = onbDraft.topics.indexOf(id);
+  if (i >= 0) onbDraft.topics.splice(i,1); else { onbDraft.topics.push(id); pop(el); }
+  el.classList.toggle('sel'); onbFootState();
+}
+function toggleTiming(id, el) {
+  const i = onbDraft.timing.indexOf(id);
+  if (i >= 0) onbDraft.timing.splice(i,1); else { onbDraft.timing.push(id); pop(el); }
+  el.classList.toggle('sel'); onbFootState();
+}
+
+function onbRender() {
+  const step = ONB_ORDER[onbIdx];
+  document.querySelectorAll('.onb-step').forEach(s =>
+    s.classList.toggle('on', +s.dataset.step === step));
+  document.getElementById('onb-bar-i').style.width =
+    Math.round((onbIdx / (ONB_ORDER.length - 1)) * 100) + '%';
+  document.getElementById('onb-back').classList.toggle('on', onbIdx > 0 && step !== 25 && step !== 4);
+  document.querySelector('.onb-body').scrollTop = 0;
+  onbFootState();
+
+  if (step === 25) {   // 계산 연출 — 자동 진행
+    const msgs = ['당신에게 맞는 일정 고르는 중…','2026년 일정 94개 훑는 중…','알림 세팅 맞추는 중…'];
+    let mi = 0;
+    const el = document.getElementById('onb-calc-msg');
+    const iv = setInterval(() => { mi = (mi+1) % msgs.length; el.textContent = msgs[mi]; }, 480);
+    onbDraft.topics = recommendTopics(onbDraft.style, onbDraft.assets);
+    buildOnbTopics();
+    setTimeout(() => { clearInterval(iv); onbIdx++; onbRender(); }, 1450);
+  }
+  if (step === 35) { buildInterests(); }
+  if (step === 4) { renderOnbResult(); }
+}
+
+function onbFootState() {
+  const step = ONB_ORDER[onbIdx];
+  const next = document.getElementById('onb-next');
+  const ghost = document.getElementById('onb-ghost');
+  const hint = document.getElementById('onb-hint');
+  const foot = document.querySelector('.onb-foot');
+  foot.style.display = (step === 25) ? 'none' : '';
+  next.classList.remove('accent'); ghost.style.display = 'none'; hint.textContent = '';
+
+  if (step === 0) { next.textContent = '30초만 주세요 →'; next.disabled = false; }
+  else if (step === 1) {
+    next.textContent = '다음'; next.disabled = !onbDraft.style;
+    hint.textContent = onbDraft.style ? '' : '하나 골라주세요';
+  }
+  else if (step === 2) {
+    next.textContent = '다음'; next.disabled = onbDraft.assets.length === 0;
+    hint.textContent = onbDraft.assets.length ? `${onbDraft.assets.length}개 선택` : '하나 이상 골라주세요';
+  }
+  else if (step === 3) {
+    const n = countMatchingEvents(onbDraft.topics);
+    next.textContent = '이걸로 할게요'; next.disabled = onbDraft.topics.length === 0;
+    hint.textContent = onbDraft.topics.length
+      ? `주제 ${onbDraft.topics.length}개 · 앞으로 챙길 일정 ${n.future}개`
+      : '주제를 하나 이상 켜주세요';
+  }
+  else if (step === 4) {
+    next.textContent = '📅 캘린더에 등록하기'; next.disabled = false;
+    next.classList.add('accent');
+    ghost.style.display = ''; ghost.textContent = onbReopen ? '저장만 하고 닫기' : '나중에 할게요';
+  }
+}
+
+function onbNext() {
+  const step = ONB_ORDER[onbIdx];
+  if (step === 4) { onbFinish(true); return; }
+  onbIdx++; onbRender();
+}
+function onbBack() { if (onbIdx > 0) { onbIdx--; if (ONB_ORDER[onbIdx] === 25) onbIdx--; onbRender(); } }
+function onbSkip() {
+  PROFILE = PROFILE || defaultProfile();
+  if (!PROFILE.topics.length) PROFILE.topics = ['FOMC','CPI','NFP','KR_BOK'];
+  PROFILE.done = true; saveProfile();
+  closeOnboarding(); afterOnboarding(false);
+}
+function onbFinish(withIcs) {
+  PROFILE = onbDraft; PROFILE.done = true; saveProfile();
+  closeOnboarding();
+  if (withIcs) downloadIcs();
+  afterOnboarding(!onbReopen);
+}
+function closeOnboarding() {
+  document.getElementById('onb').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function afterOnboarding(runCoach) {
+  renderNotifSettings(); renderMyTopics(); renderHome();
+  if (runCoach && !PROFILE.coached) setTimeout(coachStart, 550);
+}
+
+function countMatchingEvents(topics) {
+  const set = new Set(topics);
+  let future = 0, total = 0;
+  EVENTS.forEach(([s,e,g,t]) => {
+    if (!set.has(t)) return;
+    total++;
+    if (parseYmd(s).getTime() >= today.getTime()) future++;
+  });
+  return { future, total };
+}
+
+function renderOnbResult() {
+  const st = STYLES.find(s => s.id === onbDraft.style) || STYLES[0];
+  const as = ASSETS.filter(a => onbDraft.assets.includes(a.id)).map(a => a.n.split(' ')[1] || a.n);
+  const n = countMatchingEvents(onbDraft.topics);
+  const next = nextMatching(onbDraft.topics);
+  const dLabel = next
+    ? (next.days === 0 ? '오늘' : next.days === 1 ? '내일' : `D-${next.days}`)
+    : '—';
+  document.getElementById('onb-result').innerHTML = `
+    <div class="rl">당신의 세팅</div>
+    <div class="rt">${st.e} ${st.n}${as.length ? ' × ' + as.slice(0,2).join('·') : ''}</div>
+    <div class="rd">${onbDraft.topics.length}개 주제만 골라 알려드립니다.
+      나머지 소음은 안 보여드려요.</div>
+    <div class="rstats">
+      <div class="rstat"><div class="v">${n.future}</div><div class="k">앞으로 챙길 일정</div></div>
+      <div class="rstat"><div class="v">${dLabel}</div><div class="k">${next ? shortTitle(next.title) : '다음 일정'}</div></div>
+    </div>`;
+}
+
+// "🇺🇸 미국 NFP (7월 고용)" → "미국 NFP"
+function shortTitle(t) {
+  return String(t).replace(/^\S+\s/, '').replace(/\s*\(.*$/, '').trim().slice(0, 12);
+}
+
+function nextMatching(topics) {
+  const set = new Set(topics);
+  let best = null;
+  EVENTS.forEach(([s,e,g,t,title]) => {
+    if (!set.has(t)) return;
+    const days = Math.round((parseYmd(s).getTime() - today.getTime()) / 86400000);
+    if (days < 0) return;
+    if (!best || days < best.days) best = { days, title, k:s, t, g };
+  });
+  return best;
+}
+
+// ════════════════════════════════════════════════════════════════════
+// 코치마크 튜토리얼
+// ════════════════════════════════════════════════════════════════════
+const COACH = [
+  { sel:'.tab[data-screen="home"]', t:'① 홈 — 오늘 한 장 요약',
+    d:'환율·코스피·수급, 그리고 이번 주 S급 일정이 여기 다 모여 있어요. 아침에 여기만 보면 됩니다.', tab:'home' },
+  { sel:'#trust-chip', t:'② 이 데이터 믿어도 되나?',
+    d:'앱이 스스로 일정을 점검한 결과예요. 눌러보면 어떤 항목이 통과했고 뭐가 확인 필요한지 다 보여줍니다.', tab:'home' },
+  { sel:'.tab[data-screen="cal"]', t:'③ 캘린더 — 날짜를 눌러보세요',
+    d:'등급별 색(빨강 S · 분홍 A · 주황 B · 노랑 C)으로 한눈에. 일정을 누르면 “이게 뭔지·왜 중요한지”가 쉬운 말로 나옵니다.', tab:'cal' },
+  { sel:'.tab[data-screen="settings"]', t:'④ 더보기 — 알림은 여기서',
+    d:'알림 주제를 바꾸거나, 휴대폰 캘린더에 다시 등록할 수 있어요.', tab:'settings' },
+];
+let coachIdx = 0;
+
+function coachStart() { coachIdx = 0; document.getElementById('coach').classList.add('show'); coachShow(); }
+function coachNext() { coachIdx++; if (coachIdx >= COACH.length) { coachEnd(); return; } coachShow(); }
+function coachEnd() {
+  document.getElementById('coach').classList.remove('show');
+  if (PROFILE) { PROFILE.coached = true; saveProfile(); }
+  switchTab('home');
+}
+function coachShow() {
+  const c = COACH[coachIdx];
+  if (c.tab) switchTab(c.tab);
+  setTimeout(() => {
+    const el = document.querySelector(c.sel);
+    const hole = document.getElementById('coach-hole');
+    const box  = document.getElementById('coach-box');
+    if (el) {
+      const r = el.getBoundingClientRect();
+      const pad = 8;
+      hole.style.left   = (r.left - pad) + 'px';
+      hole.style.top    = (r.top - pad) + 'px';
+      hole.style.width  = (r.width + pad*2) + 'px';
+      hole.style.height = (r.height + pad*2) + 'px';
+      hole.style.display = 'block';
+      // 위/아래 배치
+      const below = r.top < window.innerHeight * 0.45;
+      box.style.top = below ? (r.bottom + 18) + 'px' : '';
+      box.style.bottom = below ? '' : (window.innerHeight - r.top + 18) + 'px';
+    } else {
+      hole.style.display = 'none';
+      box.style.top = '30%'; box.style.bottom = '';
+    }
+    document.getElementById('coach-t').textContent = c.t;
+    document.getElementById('coach-d').textContent = c.d;
+    document.getElementById('coach-dots').innerHTML =
+      COACH.map((_,i) => `<i class="${i===coachIdx?'on':''}"></i>`).join('');
+    document.getElementById('coach-btn').textContent =
+      coachIdx === COACH.length - 1 ? '시작하기' : '다음';
+    box.style.animation = 'none'; void box.offsetWidth; box.style.animation = '';
+  }, c.tab ? 260 : 0);
+}
+
+// ════════════════════════════════════════════════════════════════════
+// 알림 — 휴대폰 캘린더(.ics)로 진짜 울리게
+// ════════════════════════════════════════════════════════════════════
+function renderNotifSettings() {
+  const p = PROFILE || defaultProfile();
+  document.getElementById('nt-chips').innerHTML = TOPICS.map(t => `
+    <button class="nt-chip ${p.topics.includes(t.id)?'sel':''}"
+            onclick="toggleSavedTopic('${t.id}', this)">${t.flag} ${t.ko}</button>`).join('')
+    + `<div style="width:100%;height:2px;"></div>`
+    + TIMINGS.map(t => `
+    <button class="nt-chip ${p.timing.includes(t.id)?'sel':''}"
+            onclick="toggleSavedTiming('${t.id}', this)">${t.n}</button>`).join('');
+  updateNtNote();
+}
+function toggleSavedTopic(id, el) {
+  PROFILE = PROFILE || defaultProfile();
+  const i = PROFILE.topics.indexOf(id);
+  if (i >= 0) PROFILE.topics.splice(i,1); else PROFILE.topics.push(id);
+  el.classList.toggle('sel'); saveProfile(); updateNtNote(); renderMyTopics(); renderHome();
+}
+function toggleSavedTiming(id, el) {
+  PROFILE = PROFILE || defaultProfile();
+  const i = PROFILE.timing.indexOf(id);
+  if (i >= 0) PROFILE.timing.splice(i,1); else PROFILE.timing.push(id);
+  el.classList.toggle('sel'); saveProfile(); updateNtNote();
+}
+function updateNtNote() {
+  const p = PROFILE || defaultProfile();
+  const n = countMatchingEvents(p.topics);
+  const tm = TIMINGS.filter(t => p.timing.includes(t.id)).map(t => t.n.replace(/^\S+\s/,''));
+  document.getElementById('nt-note').innerHTML =
+    `앞으로 남은 <b>${n.future}개</b> 일정이 등록됩니다` +
+    (tm.length ? ` · 알림 ${tm.join(' + ')}` : ' · ⚠️ 알림 시점을 하나 이상 켜세요');
+}
+function renderMyTopics() {
+  const p = PROFILE || defaultProfile();
+  const st = STYLES.find(s => s.id === p.style);
+  const as = ASSETS.filter(a => p.assets.includes(a.id));
+  const bits = [];
+  if (st) bits.push(`${st.e} ${st.n}`);
+  as.forEach(a => bits.push(a.n));
+  if (!bits.length) bits.push('아직 설문 전 — 「🔁 설문 다시」를 눌러보세요');
+  document.getElementById('my-topics').innerHTML =
+    bits.map(b => `<span class="mt">${b}</span>`).join('');
+}
+
+function pad2(n) { return String(n).padStart(2,'0'); }
+function icsDT(dateStr, tpl) {
+  const t = TIME_KST[tpl] || { h:9, m:0, off:0 };
+  const d = parseYmd(dateStr); d.setDate(d.getDate() + (t.off || 0));
+  return `${d.getFullYear()}${pad2(d.getMonth()+1)}${pad2(d.getDate())}T${pad2(t.h)}${pad2(t.m)}00`;
+}
+function icsEsc(s) { return String(s).replace(/[\\;,]/g, m => '\\'+m).replace(/\n/g, '\\n'); }
+// RFC 5545 — 75옥텟 넘는 줄은 접어야 일부 캘린더 앱이 안 깨진다
+function icsFold(line) {
+  const enc = new TextEncoder();
+  if (enc.encode(line).length <= 73) return line;
+  const out = []; let cur = ''; let len = 0;
+  for (const ch of line) {
+    const w = enc.encode(ch).length;
+    if (len + w > 73) { out.push(cur); cur = ' '; len = 1; }
+    cur += ch; len += w;
+  }
+  out.push(cur);
+  return out.join('\r\n');
+}
+
+function buildIcs() {
+  const p = PROFILE || defaultProfile();
+  const set = new Set(p.topics);
+  const alarms = [];
+  if (p.timing.includes('d1'))  alarms.push(['-P1D',  '하루 전']);
+  if (p.timing.includes('h1'))  alarms.push(['-PT1H', '1시간 전']);
+  if (p.timing.includes('m10')) alarms.push(['-PT10M','10분 전']);
+
+  const now = new Date();
+  const STAMP = `${now.getUTCFullYear()}${pad2(now.getUTCMonth()+1)}${pad2(now.getUTCDate())}T`
+              + `${pad2(now.getUTCHours())}${pad2(now.getUTCMinutes())}${pad2(now.getUTCSeconds())}Z`;
+
+  const L = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//econ-calendar//KR//KO',
+    'CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:📊 경제캘린더','X-WR-TIMEZONE:Asia/Seoul',
+    'BEGIN:VTIMEZONE','TZID:Asia/Seoul','BEGIN:STANDARD','DTSTART:19700101T000000',
+    'TZOFFSETFROM:+0900','TZOFFSETTO:+0900','TZNAME:KST','END:STANDARD','END:VTIMEZONE'];
+
+  let n = 0;
+  EVENTS.forEach(([s,e,g,t,title]) => {
+    if (!set.has(t)) return;
+    if (parseYmd(s).getTime() < today.getTime()) return;   // 지난 일정 제외
+    const start = icsDT(s, t);
+    const endD  = new Date(start.slice(0,4), +start.slice(4,6)-1, +start.slice(6,8),
+                           +start.slice(9,11), +start.slice(11,13));
+    endD.setMinutes(endD.getMinutes() + 60);
+    const end = `${endD.getFullYear()}${pad2(endD.getMonth()+1)}${pad2(endD.getDate())}T${pad2(endD.getHours())}${pad2(endD.getMinutes())}00`;
+    const tpl = TPL[t] || {}; const ex = EXPLAIN[t] || {};
+    const desc = [
+      ex.tl ? `${ex.tl}` : '',
+      ex.why ? `\n왜 중요한가: ${ex.why}` : '',
+      tpl.bull ? `\n\n📈 호재: ${tpl.bull}` : '',
+      tpl.bear ? `\n📉 악재: ${tpl.bear}` : '',
+      tpl.tip  ? `\n\n💡 ${tpl.tip}` : '',
+      `\n\n· 등급 ${g} · 발표 ${(TIME_KST[t]||{}).label || '시각 미정'} (KST)`,
+      `\n· 경제캘린더 https://seongahjo830.github.io/econ-calendar/`,
+    ].join('');
+    L.push('BEGIN:VEVENT',
+      `UID:${s}-${t}@econ-calendar`,
+      `DTSTAMP:${STAMP}`,
+      `DTSTART;TZID=Asia/Seoul:${start}`,
+      `DTEND;TZID=Asia/Seoul:${end}`,
+      `SUMMARY:${icsEsc(`[${g}] ${title}`)}`,
+      `DESCRIPTION:${icsEsc(desc)}`,
+      `CATEGORIES:경제캘린더,${g}급`);
+    alarms.forEach(([trig, lbl]) =>
+      L.push('BEGIN:VALARM','ACTION:DISPLAY',
+        `TRIGGER:${trig}`, `DESCRIPTION:${icsEsc(`${lbl} · ${title}`)}`,'END:VALARM'));
+    L.push('END:VEVENT');
+    n++;
+  });
+  L.push('END:VCALENDAR');
+  return { text: L.map(icsFold).join('\r\n') + '\r\n', count: n };
+}
+
+function downloadIcs() {
+  const p = PROFILE || defaultProfile();
+  if (!p.topics.length) { toast('알림 받을 주제를 먼저 골라주세요'); switchTab('settings'); return; }
+  if (!p.timing.length) { toast('알림 시점을 하나 이상 켜주세요'); switchTab('settings'); return; }
+  const { text, count } = buildIcs();
+  if (!count) { toast('등록할 미래 일정이 없어요'); return; }
+  const blob = new Blob([text], { type:'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = '경제캘린더.ics';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  toast(`📅 ${count}개 일정 파일 생성 — 열어서 캘린더에 추가하세요`);
+}
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 30);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(()=>t.remove(), 300); }, 3600);
+}
+
+// ════════════════════════════════════════════════════════════════════
+// 공유 — 다운로드 유입
+// ════════════════════════════════════════════════════════════════════
+const APP_URL = 'https://seongahjo830.github.io/econ-calendar/';
+function shareApp() {
+  const n = nextMatching(TOPICS.map(t=>t.id));
+  const dl = n ? (n.days===0?'오늘':n.days===1?'내일':`D-${n.days}`) : '';
+  const text = n
+    ? `📊 ${dl} ${n.title} — 광고 없는 경제캘린더로 미리 챙기세요`
+    : '📊 광고 없는 경제캘린더 — FOMC·CPI·금통위 한눈에';
+  doShare('경제캘린더', text, APP_URL);
+}
+function shareNextEvent() {
+  const p = PROFILE || defaultProfile();
+  const n = nextMatching(p.topics.length ? p.topics : TOPICS.map(t=>t.id));
+  if (!n) { toast('공유할 다음 일정이 없어요'); return; }
+  const dl = n.days===0?'오늘':n.days===1?'내일':`D-${n.days}`;
+  const ex = EXPLAIN[n.t] || {};
+  doShare(n.title,
+    `⚠️ ${dl} · ${n.title}\n${ex.tl || ''}\n발표 ${(TIME_KST[n.t]||{}).label||''} (KST)`, APP_URL);
+}
+function doShare(title, text, url) {
+  if (navigator.share) {
+    navigator.share({ title, text, url }).catch(()=>{});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(`${text}\n${url}`).then(
+      () => toast('📋 복사했어요 — 붙여넣기 하세요'), () => toast('복사 실패'));
+  } else { toast(url); }
+}
+
+// ════════════════════════════════════════════════════════════════════
+// 데이터 검증 콘솔 — "틀린 정보 올려놨나?" 자동 점검
+// ════════════════════════════════════════════════════════════════════
+const WDN = ['일','월','화','수','목','금','토'];
+
+// n번째 특정 요일 (n: 1~5, wd: 0=일)
+function nthWeekdayOf(y, m, wd, n) {
+  const first = new Date(y, m, 1);
+  const shift = (wd - first.getDay() + 7) % 7;
+  return new Date(y, m, 1 + shift + (n-1)*7);
+}
+function sameDay(a, b) { return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+
+// 규칙: 각 종류가 "달력상 언제여야 하는가"
+const RULES = {
+  NFP: { name:'미국 고용(NFP)', expect:'매월 첫째(또는 둘째) 금요일',
+    check(d) {
+      if (d.getDay() !== 5) return ['bad', `${WDN[d.getDay()]}요일 — NFP는 반드시 금요일`];
+      const f1 = nthWeekdayOf(d.getFullYear(), d.getMonth(), 5, 1);
+      const f2 = nthWeekdayOf(d.getFullYear(), d.getMonth(), 5, 2);
+      if (sameDay(d,f1) || sameDay(d,f2)) return ['ok',''];
+      return ['warn', '첫째·둘째 금요일이 아님 — BLS 일정 확인 필요'];
+    } },
+  WITCH: { name:'네마녀의날', expect:'3·6·9·12월 둘째 목요일',
+    check(d) {
+      if (![2,5,8,11].includes(d.getMonth())) return ['bad','3·6·9·12월이 아님'];
+      if (d.getDay() !== 4) return ['bad', `${WDN[d.getDay()]}요일 — 네마녀는 목요일`];
+      return sameDay(d, nthWeekdayOf(d.getFullYear(), d.getMonth(), 4, 2))
+        ? ['ok',''] : ['warn','둘째 목요일이 아님'];
+    } },
+  KR_OPT: { name:'한국 옵션만기', expect:'매월 둘째 목요일',
+    check(d) {
+      if (d.getDay() !== 4) return ['bad', `${WDN[d.getDay()]}요일 — 옵션만기는 목요일`];
+      return sameDay(d, nthWeekdayOf(d.getFullYear(), d.getMonth(), 4, 2))
+        ? ['ok',''] : ['warn','둘째 목요일이 아님'];
+    } },
+  US_OPT: { name:'미국 SPX 만기', expect:'매월 셋째 금요일',
+    check(d) {
+      if (d.getDay() !== 5) return ['bad', `${WDN[d.getDay()]}요일 — SPX 만기는 금요일`];
+      return sameDay(d, nthWeekdayOf(d.getFullYear(), d.getMonth(), 5, 3))
+        ? ['ok',''] : ['warn','셋째 금요일이 아님'];
+    } },
+  KR_TRADE: { name:'한국 수출입', expect:'매월 1일 (휴일이면 다음 영업일)',
+    check(d) {
+      if (d.getDate() <= 4) return ['ok',''];
+      return ['warn', `${d.getDate()}일 — 보통 1~4일에 발표`];
+    } },
+  KR_BOK: { name:'한국 금통위', expect:'목요일 (연 8회)',
+    check(d) { return d.getDay() === 4 ? ['ok',''] : ['warn', `${WDN[d.getDay()]}요일 — 금통위는 보통 목요일`]; } },
+  FOMC: { name:'FOMC', expect:'화~수 이틀 (연 8회)',
+    check(d, end) {
+      if (!end) return ['bad','FOMC는 이틀 일정인데 종료일이 없음'];
+      if (d.getDay() !== 2) return ['warn', `${WDN[d.getDay()]}요일 시작 — FOMC는 보통 화요일 시작`];
+      return ['ok',''];
+    } },
+  CPI: { name:'미국 CPI', expect:'평일(보통 화~목)',
+    check(d) {
+      if (d.getDay()===0 || d.getDay()===6) return ['bad','주말 — 발표 불가'];
+      return [2,3,4].includes(d.getDay()) ? ['ok',''] : ['warn', `${WDN[d.getDay()]}요일 — 보통 화~목`];
+    } },
+  PCE: { name:'미국 PCE', expect:'월말 평일 (보통 금요일)',
+    check(d) {
+      if (d.getDay()===0 || d.getDay()===6) return ['bad','주말 — 발표 불가'];
+      const last = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+      if (last - d.getDate() > 8) return ['warn', '월말이 아님 — PCE는 보통 월말'];
+      return ['ok',''];
+    } },
+  EU_CPI: { name:'유로존 CPI Flash', expect:'월말 ±4일',
+    check(d) {
+      const last = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+      if (d.getDay()===0 || d.getDay()===6) return ['bad','주말 — 발표 불가'];
+      return (last - d.getDate() <= 6) ? ['ok',''] : ['warn','월말 근처가 아님'];
+    } },
+  BOJ: { name:'일본 BOJ', expect:'연 8회 · 평일',
+    check(d) { return (d.getDay()===0||d.getDay()===6) ? ['bad','주말 — 발표 불가'] : ['ok','']; } },
+  JACKSON: { name:'잭슨홀', expect:'8월 하순',
+    check(d) { return d.getMonth() === 7 ? ['ok',''] : ['warn','8월이 아님']; } },
+};
+
+// 연간 있어야 할 개수
+const EXPECT_COUNT = {
+  CPI:12, NFP:12, PCE:12, KR_TRADE:12, FOMC:8, KR_BOK:8,
+  WITCH:4, US_OPT:12, KR_OPT:12, BOJ:8, EU_CPI:12, JACKSON:1,
+};
+const SOURCES = [
+  ['Fed (FOMC 일정)','https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm'],
+  ['BLS (CPI·고용)','https://www.bls.gov/schedule/news_release/'],
+  ['BEA (PCE)','https://www.bea.gov/news/schedule'],
+  ['한국은행 (금통위)','https://www.bok.or.kr'],
+  ['산업부 (수출입)','https://www.motie.go.kr'],
+  ['BOJ','https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm'],
+  ['Eurostat (HICP)','https://ec.europa.eu/eurostat'],
+];
+
+function dataHash() {
+  let h = 0x811c9dc5;
+  const s = JSON.stringify(EVENTS);
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(16).toUpperCase().padStart(8,'0');
+}
+
+let VERIFY_CACHE = null;
+function runVerify() {
+  if (VERIFY_CACHE) return VERIFY_CACHE;
+  const items = [], seen = new Set(), counts = {};
+
+  EVENTS.forEach(([s,e,g,t,title], idx) => {
+    const push = (lv, msg, extra) => items.push({ lv, group:'rule', k:s, t, title, msg, extra });
+    // 구조
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) { push('bad','시작일 형식 오류: ' + s); return; }
+    const d = parseYmd(s);
+    if (isNaN(d)) { push('bad','존재하지 않는 날짜: ' + s); return; }
+    if (e) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(e)) push('bad','종료일 형식 오류: ' + e);
+      else if (parseYmd(e) < d) push('bad','종료일이 시작일보다 빠름');
+    }
+    if (!GRADE[g]) push('bad','알 수 없는 등급: ' + g);
+    if (!TPL[t])     push('bad',`시나리오(TPL) 누락: ${t}`);
+    if (!EXPLAIN[t]) push('bad',`쉬운 설명(EXPLAIN) 누락: ${t}`);
+    if (!TIME_KST[t])push('warn',`발표 시각 미등록: ${t} — 알림 정확도 낮음`);
+
+    const key = s + '/' + t;
+    if (seen.has(key)) push('bad','같은 날 같은 종류가 중복 등록됨');
+    seen.add(key);
+
+    counts[t] = (counts[t] || 0) + 1;
+
+    const rule = RULES[t];
+    if (rule) {
+      const [lv, msg] = rule.check(d, e ? parseYmd(e) : null);
+      if (lv !== 'ok') push(lv, msg, rule.expect);
+    }
+  });
+
+  // 커버리지
+  const cov = [];
+  Object.keys(EXPECT_COUNT).forEach(t => {
+    const have = counts[t] || 0, want = EXPECT_COUNT[t];
+    const tp = TOPICS.find(x => x.id === t);
+    const nm = (RULES[t] && RULES[t].name) || (tp && tp.ko) || t;
+    if (have === 0) cov.push({ lv:'bad', t, msg:`${nm} — 등록 0개 (${want}개 예상)` });
+    else if (have < want) cov.push({ lv:'warn', t, msg:`${nm} — ${have}/${want}개, ${want-have}개 빠짐` });
+    else if (have > want) cov.push({ lv:'warn', t, msg:`${nm} — ${have}/${want}개, ${have-want}개 초과(중복 의심)` });
+    else cov.push({ lv:'ok', t, msg:`${nm} — ${have}/${want}개 ✓` });
+  });
+
+  // 신선도
+  const fresh = [];
+  const futureN = EVENTS.filter(([s]) => parseYmd(s) >= today).length;
+  const lastDate = EVENTS.map(([s]) => s).sort().slice(-1)[0];
+  const daysLeft = Math.round((parseYmd(lastDate) - today) / 86400000);
+  fresh.push({ lv: futureN === 0 ? 'bad' : futureN < 10 ? 'warn' : 'ok',
+    msg:`앞으로 남은 일정 ${futureN}개` });
+  fresh.push({ lv: daysLeft < 30 ? 'bad' : daysLeft < 90 ? 'warn' : 'ok',
+    msg:`데이터 마지막 일정 ${lastDate} (${daysLeft}일 남음)` +
+        (daysLeft < 90 ? ' — 다음 해 일정을 채워야 합니다' : '') });
+
+  const all = [...items, ...cov, ...fresh];
+  const bad  = all.filter(x => x.lv === 'bad').length;
+  const warn = all.filter(x => x.lv === 'warn').length;
+  // 이슈가 하나라도 걸린 이벤트 날짜 수를 빼서 "깨끗한 일정" 개수 산출
+  const dirty = new Set(items.map(i => i.k + '/' + i.t)).size;
+  const ok = EVENTS.length - dirty;
+
+  VERIFY_CACHE = { items, cov, fresh, bad, warn, ok, total:EVENTS.length, hash:dataHash() };
+  return VERIFY_CACHE;
+}
+
+function renderTrustChip() {
+  const v = runVerify();
+  const el = document.getElementById('trust-chip');
+  const tx = document.getElementById('trust-txt');
+  if (!el) return;
+  // 🔴 오류가 있을 때만 경고색. 🟡(보완 대상)은 "점검하고 있다"는 신뢰 신호로 표시.
+  el.classList.toggle('warn', v.bad > 0);
+  tx.innerHTML = v.bad > 0
+    ? `🔴 자동 점검 — <b>고쳐야 할 항목 ${v.bad}건</b>`
+    : v.warn > 0
+      ? `✅ 일정 ${v.total}개 자동 점검 · 오류 0 <span style="opacity:.7">· 보완 ${v.warn}건</span>`
+      : `✅ 일정 ${v.total}개 자동 점검 통과 · 이상 없음`;
+  const teaser = document.getElementById('vf-teaser');
+  if (teaser) teaser.textContent = (v.bad + v.warn === 0)
+    ? `${v.total}개 전부 통과 · 지문 ${v.hash}`
+    : `실패 ${v.bad} · 경고 ${v.warn} · 지문 ${v.hash}`;
+}
+
+function vfRow(lv, title, desc, k) {
+  const ic = lv==='bad' ? '🔴' : lv==='warn' ? '🟡' : '🟢';
+  const cls = lv==='bad' ? 'bad' : lv==='warn' ? 'warn' : '';
+  const onclick = k ? ` onclick="closeVerify(); goEvent('${k}')"` : '';
+  const tag = k ? 'button' : 'div';
+  return `<${tag} class="vf-item ${cls}"${onclick}>
+    <div class="ic">${ic}</div>
+    <div class="tx"><div class="t">${title}</div>${desc?`<div class="d">${desc}</div>`:''}</div>
+    ${k?'<div class="go">보기 ›</div>':''}
+  </${tag}>`;
+}
+
+function openVerify() {
+  const v = runVerify();
+  const byLv = { bad:0, warn:1, ok:2 };
+  const ruleItems = [...v.items].sort((a,b) => byLv[a.lv]-byLv[b.lv] || a.k.localeCompare(b.k));
+
+  document.getElementById('verify-body').innerHTML = `
+    <div class="vf-lead">앱이 <b>스스로 일정 데이터를 점검한 결과</b>입니다.
+      달력 규칙(첫째 금요일·둘째 목요일 등), 개수, 중복, 형식, 남은 기간을 자동으로 확인해요.
+      🔴는 고쳐야 할 것, 🟡는 공식 발표와 대조가 필요한 것입니다.</div>
+
+    <div class="vf-summary">
+      <div class="vf-sum ok"><div class="v">${v.ok}</div><div class="k">이상 없음</div></div>
+      <div class="vf-sum warn"><div class="v">${v.warn}</div><div class="k">확인 필요</div></div>
+      <div class="vf-sum bad"><div class="v">${v.bad}</div><div class="k">오류</div></div>
+    </div>
+    <div class="vf-hash">데이터 지문 ${v.hash} · 이벤트 ${v.total}개 · 이 값이 바뀌면 일정이 수정된 것입니다</div>
+
+    <div class="vf-group">
+      <h4>① 달력 규칙 대조 ${ruleItems.length ? `(${ruleItems.length}건)` : ''}</h4>
+      ${ruleItems.length
+        ? ruleItems.map(i => vfRow(i.lv, `${i.k} · ${i.title}`,
+            `${i.msg}${i.extra?` <span style="opacity:.7">(기준: ${i.extra})</span>`:''}`, i.k)).join('')
+        : vfRow('ok','모든 일정이 달력 규칙과 일치','첫째 금요일·둘째 목요일·월말 등 12종 규칙 통과')}
+    </div>
+
+    <div class="vf-group">
+      <h4>② 개수 커버리지 (빠진 일정 찾기)</h4>
+      ${v.cov.sort((a,b)=>byLv[a.lv]-byLv[b.lv]).map(c => vfRow(c.lv, c.msg, '')).join('')}
+    </div>
+
+    <div class="vf-group">
+      <h4>③ 데이터 신선도</h4>
+      ${v.fresh.map(f => vfRow(f.lv, f.msg, '')).join('')}
+    </div>
+
+    <div class="vf-group">
+      <h4>④ 공식 출처에서 직접 확인</h4>
+      <div class="vf-lead" style="margin-bottom:8px;">자동 점검은 "달력 규칙"만 봅니다.
+        실제 날짜가 맞는지는 아래 공식 페이지가 최종 기준입니다.</div>
+      <div class="vf-src">
+        ${SOURCES.map(([n,u]) => `<a href="${u}" target="_blank" rel="noopener">${n} ↗</a>`).join('')}
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--ink-3);padding:12px 0 6px;line-height:1.6;">
+      ※ 이 앱의 일정은 공식 발표 일정을 정리한 것으로, 발표 기관 사정으로 변경될 수 있습니다.
+      투자 판단의 최종 책임은 사용자 본인에게 있습니다.
+    </div>`;
+
+  document.getElementById('verify-mask').classList.add('show');
+  document.getElementById('verify-sheet').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeVerify() {
+  document.getElementById('verify-mask').classList.remove('show');
+  document.getElementById('verify-sheet').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
 // ====================================================================
 // 초기화
 // ====================================================================
 document.getElementById('ev-count').textContent = `${EVENTS.length}개`;
+renderNotifSettings();
+renderMyTopics();
 renderHome();
 renderMonth();
 renderSheet();
+renderTrustChip();
+
+// 첫 진입 → 온보딩 설문
+if (!PROFILE || !PROFILE.done) {
+  setTimeout(() => openOnboarding(false), 260);
+} else if (!PROFILE.coached) {
+  setTimeout(coachStart, 700);
+}
 
 // ESC로 모달 닫기
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeTriggerModal(); closeDetail(); }
+  if (e.key === 'Escape') { closeTriggerModal(); closeDetail(); closeVerify(); }
 });
 
 // 서비스 워커 — 즉시 갱신
