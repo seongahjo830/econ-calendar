@@ -924,6 +924,15 @@
 .nw-d{margin-top:6px;font-size:12.5px;line-height:1.6;color:var(--sub);
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .nw-ft{display:flex;justify-content:space-between;margin-top:9px;font-size:11.5px;color:var(--ink-3,#9aa3b2);font-weight:600}
+
+/* ── v8 실제 시세 ── */
+.coin-strip{display:flex;gap:7px;flex-wrap:wrap;margin:2px 16px 6px}
+.coin{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--line);
+  border-radius:10px;padding:6px 10px;font-size:12px;font-weight:700;color:var(--ink)}
+.coin b{font-size:11px;font-weight:800;color:var(--sub)}
+.coin i{font-style:normal;font-size:11px;font-weight:800}
+.coin i.up{color:#c92a2a}
+.coin i.dn{color:#1864ab}
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -943,8 +952,10 @@
     <div class="date-line" id="home-date">— · —요일</div>
   </div>
 
+  <div class="coin-strip" id="coin-strip" hidden></div>
+
   <div class="sample-chip" id="sample-chip">
-    <span class="dot"></span>시세·수급 샘플 데이터 · 발표값 자동수집은 Phase 3.1.1
+    <span class="dot"></span><span id="mk-note">환율·코인은 실시간 · 코스피·수급은 샘플</span>
   </div>
 
   <button class="trust-chip" id="trust-chip" onclick="openVerify()">
@@ -2211,6 +2222,55 @@ function renderNews() {
 
 function setNwCat(c) { nwCat = c; renderNews(); }
 
+
+/* ═══ 실제 시세 (v8) ═══
+   news.json 에 econ-news-sync 가 매시간 넣어주는 rates 를 쓴다.
+   못 받으면 아무것도 안 바꾼다 — 기존 샘플값이 그대로 남고, 고지도 그대로다. */
+async function applyRealRates() {
+  let d = null;
+  try {
+    const r = await fetch('news.json?v=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) d = await r.json();
+  } catch (e) {}
+  const R = d && d.rates;
+  if (!R) return;
+
+  const won = v => Math.round(v).toLocaleString('ko-KR');
+
+  if (R.usdkrw) {
+    const el = document.getElementById('q-fx');
+    const ch = document.getElementById('q-fx-chg');
+    if (el) el.textContent = won(R.usdkrw.v);
+    /* 전일 대비를 주는 소스가 아니라, 없는 변동률을 지어내지 않고 기준일만 밝힌다 */
+    if (ch) { ch.textContent = R.usdkrw.d + ' 기준'; ch.className = 'chg'; }
+  }
+
+  const coins = [];
+  if (R.btc) coins.push(['비트코인', R.btc]);
+  if (R.eth) coins.push(['이더리움', R.eth]);
+  if (R.jpykrw) coins.push(['100엔', { v: R.jpykrw.v }]);
+  if (R.eurkrw) coins.push(['유로', { v: R.eurkrw.v }]);
+  const strip = document.getElementById('coin-strip');
+  if (strip && coins.length) {
+    strip.hidden = false;
+    strip.innerHTML = coins.map(([nm, o]) => {
+      const up = o.chg > 0, dn = o.chg < 0;
+      const chg = (o.chg === undefined) ? ''
+        : `<i class="${up ? 'up' : dn ? 'dn' : ''}">${up ? '▲' : dn ? '▼' : ''}${Math.abs(o.chg).toFixed(2)}%</i>`;
+      return `<span class="coin"><b>${nm}</b>${won(o.v)}${chg}</span>`;
+    }).join('');
+  }
+
+  const note = document.getElementById('mk-note');
+  if (note && d.at) {
+    const m = Math.floor((Date.now() - new Date(d.at)) / 60000);
+    const ago = m < 60 ? m + '분 전' : Math.floor(m / 60) + '시간 전';
+    note.textContent = `환율·코인 실시간(${ago}) · 코스피·수급은 샘플`;
+  }
+}
+
+window.addEventListener('load', () => { try { applyRealRates(); } catch(e){} });
+
 function renderPeriod() {
   /* 탭 */
   const tabs = document.getElementById('per-tabs');
@@ -2608,7 +2668,7 @@ function switchTab(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.screen===name));
-  if (name === 'home') renderHome();
+  if (name === 'home') { renderHome(); applyRealRates(); }
   if (name === 'today') renderTodayScreen();
   if (name === 'cal') { renderMonth(); renderSheet(); }
   if (name === 'news') loadNews();
