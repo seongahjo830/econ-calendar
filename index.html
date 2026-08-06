@@ -832,6 +832,56 @@
 .int-gB{background:#fff3e0;color:#e8590c}
 .int-gC{background:#fff9db;color:#b08900}
 @media (max-width:340px){ .int-list{grid-template-columns:1fr} }
+
+/* ── v5 일정 화면 (캡처 앱 형태) ── */
+.cal-top{display:flex;align-items:center;justify-content:space-between}
+.cal-acts{display:flex;gap:4px}
+.cal-ic{position:relative;border:none;background:transparent;font-size:19px;padding:6px 8px;cursor:pointer;line-height:1}
+.ic-badge{position:absolute;top:0;right:2px;min-width:16px;height:16px;padding:0 4px;border-radius:9px;
+  background:var(--accent);color:#fff;font-size:10px;font-weight:800;font-style:normal;
+  display:flex;align-items:center;justify-content:center}
+.cal-search{display:flex;gap:6px;padding:8px 16px 2px}
+.cal-search input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px;background:#fff;color:var(--ink)}
+.cal-search button{border:1.5px solid var(--line);background:transparent;color:var(--sub);border-radius:10px;padding:0 12px;font-size:12.5px;font-weight:700;cursor:pointer}
+.per-tabs{display:flex;gap:6px;padding:10px 16px 6px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.per-tabs::-webkit-scrollbar{display:none}
+.per-tab{flex:none;border:1.5px solid var(--line);background:#fff;color:var(--sub);
+  border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.per-tab.on{background:rgba(59,110,220,.10);border-color:var(--accent);color:var(--accent);font-weight:800}
+.day-head{display:flex;align-items:center;justify-content:space-between;margin:16px 16px 8px}
+.dh-d{font-size:15px;font-weight:800;color:var(--ink)}
+.dh-c{font-size:11.5px;font-weight:800;color:var(--accent);background:rgba(59,110,220,.10);border-radius:8px;padding:4px 9px}
+.ev-card{margin:0 16px 9px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.ec-1{display:flex;align-items:center;gap:8px}
+.ec-flag{font-size:18px;flex:none}
+.ec-name{flex:1;font-size:15px;font-weight:800;color:var(--ink);line-height:1.35}
+.ec-g{flex:none;font-size:10.5px;font-weight:900;border-radius:7px;padding:3px 7px}
+.ec-g.gS{background:#ffe3e3;color:#c92a2a}
+.ec-g.gA{background:#ffe9f0;color:#c2255c}
+.ec-g.gB{background:#fff3e0;color:#e8590c}
+.ec-g.gC{background:#fff9db;color:#b08900}
+.ec-2{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:12.5px;color:var(--sub);font-weight:700}
+.ec-cd{color:var(--accent);font-weight:800}
+.ec-tl{margin-top:7px;font-size:12.5px;line-height:1.55;color:var(--sub)}
+.nt-banner{display:flex;align-items:center;gap:11px;margin:10px 16px 2px;padding:12px 14px;
+  background:rgba(59,110,220,.08);border-radius:14px}
+.nb-ic{font-size:20px}
+.nb-tx{flex:1;display:flex;flex-direction:column}
+.nb-tx b{font-size:13.5px;color:var(--ink)}
+.nb-tx span{font-size:11.5px;color:var(--sub);margin-top:2px}
+.nb-act{display:flex;flex-direction:column;align-items:center;gap:3px}
+.nb-go{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12.5px;font-weight:800;cursor:pointer}
+.nb-later{background:transparent;border:none;color:var(--sub);font-size:11px;cursor:pointer}
+.fl-mask{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:flex-end;z-index:80}
+.fl-mask.on{display:flex}
+.fl-sheet{width:100%;background:var(--bg,#fff);border-radius:18px 18px 0 0;padding:16px 18px 26px}
+.fl-h{display:flex;align-items:center;justify-content:space-between;font-size:16px;font-weight:800;color:var(--ink);margin-bottom:12px}
+.fl-x{border:none;background:transparent;font-size:17px;cursor:pointer;color:var(--sub)}
+.fl-body{display:flex;flex-wrap:wrap;gap:8px}
+.fl-chip{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:9px 15px;font-size:13px;font-weight:700;cursor:pointer}
+.fl-chip.on{border-color:var(--accent);background:rgba(59,110,220,.10);color:var(--accent);font-weight:800}
+.fl-chip.wide{flex-basis:100%;text-align:center}
+.fl-reset{flex-basis:100%;margin-top:6px;border:none;background:transparent;color:var(--sub);font-size:12.5px;font-weight:700;cursor:pointer;padding:6px}
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -951,18 +1001,26 @@
 
 <!-- ============ 오늘 화면 ============ -->
 <section class="screen" id="screen-today">
-  <div class="topbar">
-    <div class="brand">
-      <div class="mark">★</div>
-      <div class="name">오늘 일정</div>
+  <div class="topbar cal-top">
+    <div class="brand"><div class="name">경제 일정</div></div>
+    <div class="cal-acts">
+      <button class="cal-ic" id="ic-search" onclick="toggleSearch()" aria-label="검색">🔍</button>
+      <button class="cal-ic" id="ic-filter" onclick="openFilter()" aria-label="필터">⚙️<i class="ic-badge" id="bd-filter" hidden></i></button>
+      <button class="cal-ic" id="ic-bell" onclick="switchTab('settings')" aria-label="알림">🔔<i class="ic-badge" id="bd-bell" hidden></i></button>
     </div>
   </div>
-  <div class="today-hero">
-    <div class="label" id="today-label">오늘</div>
-    <div class="date-big" id="today-date"></div>
-    <div class="date-sub" id="today-sub"></div>
+  <div class="cal-search" id="cal-search" hidden>
+    <input id="cal-q" type="search" placeholder="지표 이름으로 찾기 (예: CPI, 금통위)" oninput="renderPeriod()" autocomplete="off">
+    <button onclick="clearSearch()">지우기</button>
   </div>
-  <div class="week-strip" id="week-strip"></div>
+  <div class="per-tabs" id="per-tabs"></div>
+  <div class="nt-banner" id="nt-banner" hidden>
+    <span class="nb-ic">🔔</span>
+    <div class="nb-tx"><b>발표를 놓치지 마세요</b><span>고른 주제를 휴대폰 캘린더에 넣어드려요</span></div>
+    <div class="nb-act"><button class="nb-go" onclick="switchTab('settings')">활성화</button><button class="nb-later" onclick="laterBanner()">나중에</button></div>
+  </div>
+  <!-- 옛 히어로/주간스트립은 기간 탭이 대신한다. id는 다른 코드가 참조하므로 숨겨서 유지 -->
+  <div hidden><span id="today-label"></span><span id="today-date"></span><span id="today-sub"></span><div id="week-strip"></div></div>
 
   <div class="upcoming-label">
     <h3>다가오는 일정</h3>
@@ -1865,6 +1923,166 @@ function dayLabel(k) {
   return { tag:`D+${diff}`, cls:'future' };
 }
 
+
+/* ═══ 기간 탭 · 카드 · 검색 · 필터 (v5, 캡처 앱 형태) ═══ */
+const PERIODS = [
+  { id:'y',  n:'어제' },   { id:'t', n:'오늘' }, { id:'m', n:'내일' },
+  { id:'tw', n:'이번 주' }, { id:'nw', n:'다음 주' },
+];
+let curPeriod = 't';
+let calFilter = { grades: [], mineOnly: false };
+
+function dayKey(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate()+n); return x; }
+
+/* 기간 → 날짜 배열. 주는 월요일 시작 */
+function periodDays(p) {
+  const base = new Date(today);
+  if (p === 'y') return [addDays(base,-1)];
+  if (p === 't') return [base];
+  if (p === 'm') return [addDays(base,1)];
+  const dow = (base.getDay() + 6) % 7;              /* 월=0 */
+  const mon = addDays(base, -dow + (p === 'nw' ? 7 : 0));
+  return Array.from({length:7}, (_,i) => addDays(mon, i));
+}
+
+/* 발표 시각 문자열 + 실제 시각(Date) */
+function evAt(k, t) {
+  const tk = TIME_KST[t];
+  const d = parseYmd(k);
+  if (!tk) return { label: '시각 미정', at: null };
+  const at = new Date(d); at.setDate(at.getDate() + (tk.off||0)); at.setHours(tk.h, tk.m, 0, 0);
+  return { label: tk.label, at };
+}
+
+/* 카운트다운 — 캡처처럼 시간을 누적해서 센다(121시 36분) */
+function countdown(at) {
+  if (!at) return '';
+  const ms = at - new Date();
+  if (ms <= 0) return '';
+  const mins = Math.floor(ms / 60000);
+  return Math.floor(mins/60) + '시 ' + (mins%60) + '분';
+}
+
+/* 그 날짜의 이벤트 (검색·필터·관심사 적용) */
+function eventsOn(k) {
+  const q = (document.getElementById('cal-q')?.value || '').trim().toLowerCase();
+  const mine = new Set(profileTopics());
+  return EVENTS.filter(([s,e,g,t,title]) => {
+    const inRange = e ? (k >= s && k <= e) : k === s;
+    if (!inRange) return false;
+    if (calFilter.grades.length && !calFilter.grades.includes(g)) return false;
+    if (calFilter.mineOnly && mine.size && !mine.has(t)) return false;
+    if (q && !(title.toLowerCase().includes(q) || t.toLowerCase().includes(q))) return false;
+    return true;
+  }).map(([s,e,g,t,title]) => ({ s,e,g,t,title,k }));
+}
+
+function profileTopics() {
+  try { return (JSON.parse(localStorage.ec_profile_v1||'{}').topics)||[]; } catch(e){ return []; }
+}
+
+const GNAME = { S:'매우 높음', A:'높음', B:'보통', C:'낮음' };
+
+function evCard(ev) {
+  const { label, at } = evAt(ev.k, ev.t);
+  const cd = countdown(at);
+  const flag = flagOf(ev.title);
+  const name = ev.title.replace(/^\S*\s*/, '');
+  const tl = (EXPLAIN[ev.t]||{}).tl || '';
+  return `<div class="ev-card" onclick="openDayDetail('${ev.k}')">
+    <div class="ec-1">
+      <span class="ec-flag">${flag}</span>
+      <span class="ec-name">${name}</span>
+      <span class="ec-g g${ev.g}">${GNAME[ev.g]}</span>
+    </div>
+    <div class="ec-2">
+      <span class="ec-time">🕐 ${label}</span>
+      ${cd ? `<span class="ec-cd">⏱️ ${cd}</span>` : ''}
+    </div>
+    ${tl ? `<div class="ec-tl">${tl}</div>` : ''}
+  </div>`;
+}
+
+function dayHeaderLabel(d) {
+  const k = dayKey(d), tk = dayKey(today);
+  if (k === tk) return '오늘';
+  if (k === dayKey(addDays(today,1))) return '내일';
+  if (k === dayKey(addDays(today,-1))) return '어제';
+  const W = ['일','월','화','수','목','금','토'];
+  return (d.getMonth()+1) + '월 ' + d.getDate() + '일 (' + W[d.getDay()] + ')';
+}
+
+function renderPeriod() {
+  /* 탭 */
+  const tabs = document.getElementById('per-tabs');
+  if (tabs) tabs.innerHTML = PERIODS.map(p =>
+    `<button class="per-tab${p.id===curPeriod?' on':''}" onclick="setPeriod('${p.id}')">${p.n}</button>`).join('');
+
+  /* 어제 탭에선 알림 아이콘 숨김 — 지난 일정엔 알림이 의미 없다(캡처 동작 그대로) */
+  const bell = document.getElementById('ic-bell');
+  if (bell) bell.style.visibility = (curPeriod === 'y') ? 'hidden' : '';
+
+  const root = document.getElementById('today-events');
+  if (!root) return;
+  const days = periodDays(curPeriod);
+  let html = '', total = 0;
+  for (const d of days) {
+    const k = dayKey(d);
+    const evs = eventsOn(k).sort((a,b) => (evAt(k,a.t).at||0) - (evAt(k,b.t).at||0));
+    total += evs.length;
+    /* 하루짜리 기간은 0건이어도 헤더를 보여준다(캡처와 동일) */
+    if (!evs.length && days.length > 1) continue;
+    html += `<div class="day-head"><span class="dh-d">${dayHeaderLabel(d)}</span>
+      <span class="dh-c">${evs.length}건의 이벤트</span></div>`;
+    html += evs.map(evCard).join('');
+  }
+  if (!total) html += `<div class="empty-msg"><span class="ic">○</span>이 기간엔 해당하는 일정이 없어요</div>`;
+  root.innerHTML = html;
+
+  /* 필터 배지 */
+  const nf = calFilter.grades.length + (calFilter.mineOnly ? 1 : 0);
+  const bd = document.getElementById('bd-filter');
+  if (bd) { bd.hidden = !nf; bd.textContent = nf; }
+  /* 알림 배지 = 내가 고른 주제 중 앞으로 남은 일정 수 */
+  const mine = new Set(profileTopics());
+  const cnt = mine.size ? EVENTS.filter(e => mine.has(e[3]) && e[0] >= dayKey(today)).length : 0;
+  const bb = document.getElementById('bd-bell');
+  if (bb) { bb.hidden = !cnt; bb.textContent = cnt > 99 ? '99+' : cnt; }
+  /* 알림 배너 — 아직 캘린더 등록을 안 했고 숨기지 않았을 때만 */
+  const nb = document.getElementById('nt-banner');
+  if (nb) nb.hidden = !(localStorage.ec_ics_done !== '1' && localStorage.ec_banner_hide !== '1');
+}
+
+function setPeriod(p) { curPeriod = p; renderPeriod(); }
+function toggleSearch() {
+  const b = document.getElementById('cal-search');
+  b.hidden = !b.hidden;
+  if (!b.hidden) document.getElementById('cal-q').focus(); else clearSearch();
+}
+function clearSearch() { const q = document.getElementById('cal-q'); if (q) q.value=''; renderPeriod(); }
+function laterBanner() { localStorage.ec_banner_hide = '1'; renderPeriod(); }
+
+function openFilter() {
+  const g = ['S','A','B','C'];
+  const body = g.map(x => `<button class="fl-chip${calFilter.grades.includes(x)?' on':''}" onclick="tglGrade('${x}')">${GNAME[x]}</button>`).join('')
+    + `<button class="fl-chip wide${calFilter.mineOnly?' on':''}" onclick="tglMine()">내 관심사만</button>`
+    + `<button class="fl-reset" onclick="resetFilter()">필터 모두 해제</button>`;
+  const m = document.getElementById('fl-mask');
+  document.getElementById('fl-body').innerHTML = body;
+  m.classList.add('on');
+}
+function closeFilter() { document.getElementById('fl-mask').classList.remove('on'); }
+function tglGrade(x) {
+  const i = calFilter.grades.indexOf(x);
+  if (i === -1) calFilter.grades.push(x); else calFilter.grades.splice(i,1);
+  openFilter(); renderPeriod();
+}
+function tglMine() { calFilter.mineOnly = !calFilter.mineOnly; openFilter(); renderPeriod(); }
+function resetFilter() { calFilter = { grades: [], mineOnly: false }; openFilter(); renderPeriod(); }
+
 function renderTodayScreen() {
   const sel = selectedTodayDay || ymd(today);
   const selD = parseYmd(sel);
@@ -1941,6 +2159,9 @@ function renderTodayScreen() {
   // v2.4.0: 한 줄 요약 + "어떤 느낌인지" 한 줄 설명
   root.innerHTML = evs.map(renderMiniRow).join('');
 }
+/* v5: 캡처 형태 렌더가 최종 화면을 그린다 */
+const _oldRenderToday = renderTodayScreen;
+renderTodayScreen = function(){ try { _oldRenderToday.apply(this, arguments); } catch(e){} renderPeriod(); };
 
 // 공통 미니 행 — 제목 아래에 한 줄 느낌(EXPLAIN.tl) 같이 노출 (v2.4.0)
 function miniRow(k, g, t, title, dtLabel, badgeHtml) {
@@ -3130,5 +3351,11 @@ if ('serviceWorker' in navigator) {
   }).catch(()=>{});
 }
 </script>
+<div class="fl-mask" id="fl-mask" onclick="if(event.target===this)closeFilter()">
+  <div class="fl-sheet">
+    <div class="fl-h">필터<button class="fl-x" onclick="closeFilter()">✕</button></div>
+    <div class="fl-body" id="fl-body"></div>
+  </div>
+</div>
 </body>
 </html>
